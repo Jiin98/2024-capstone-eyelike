@@ -1,4 +1,4 @@
-import 'package:eye_like/loading.dart';
+import 'package:eye_like/pages/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

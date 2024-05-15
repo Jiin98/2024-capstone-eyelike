@@ -10,31 +10,59 @@ class TutorialSecond extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          const Center(
-            child: Text('TutorialSecond'),
+          Center(
+            child: Image.asset('assets/images/tutorial_camera.png'),
           ),
-          Container(
-            color: Colors.grey.withOpacity(0.5),
-            child: Align(
-              alignment: const Alignment(0, 0.1),
-              child: Container(
-                width: 100,
-                height: 50,
-                color: Colors.blue,
-                child: TextButton(
-                  onPressed: () {
-                    Get.to(const TutorialThird());
-                  },
-                  child: const Center(
-                    child: Text(
-                      'Next',
-                      style: TextStyle(color: Colors.white),
+          Stack(
+            children: [
+              Container(
+                color: Colors.grey.withOpacity(0.8),
+              ),
+              Container(
+                alignment: const Alignment(0, 0.8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center, //가로축 중앙정렬
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 50,
+                      color: Colors.blue,
+                      child: TextButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: const Center(
+                          child: Text(
+                            'Previous',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Container(
+                      width: 100,
+                      height: 50,
+                      color: Colors.blue,
+                      child: TextButton(
+                        onPressed: () {
+                          Get.to(const TutorialThird());
+                        },
+                        child: const Center(
+                          child: Text(
+                            'Next',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-          )
+            ],
+          ),
         ],
       ),
     );
