@@ -73,7 +73,7 @@ Widget _overlay() {
 
 Widget _header() {
   return const Positioned(
-    top: 120,
+    top: 100,
     left: 100,
     child: Column(
       children: [

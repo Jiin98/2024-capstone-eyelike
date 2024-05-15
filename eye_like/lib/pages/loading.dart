@@ -23,7 +23,7 @@ Widget _logoimage() {
   return SizedBox(
     height: 160,
     width: 160,
-    child: Image.asset('assets/images/loading_logo.png'),
+    child: Image.asset('assets/images/loading_logo.gif'),
   );
 }
 
