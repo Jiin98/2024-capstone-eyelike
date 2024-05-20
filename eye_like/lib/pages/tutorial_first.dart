@@ -126,14 +126,21 @@ Widget _body2() {
   );
 }
 
-Widget _button() {
-  return Container(
-    alignment: const Alignment(0.5, 0.8), //버튼 가운데 정렬 안돼서 추가
-    child: IconButton(
-        onPressed: () {
-          Get.to(const TutorialSecond());
-        },
-        icon: Image.asset('assets/images/next_button.png')),
+Widget _previousButton() {
+  return IconButton(
+    onPressed: () {
+      Get.back();
+    },
+    icon: Image.asset('assets/images/previous_button.png'),
+  );
+}
+
+Widget _nextButton() {
+  return IconButton(
+    onPressed: () {
+      Get.to(const TutorialSecond());
+    },
+    icon: Image.asset('assets/images/next_button.png'),
   );
 }
 
@@ -153,7 +160,19 @@ class TutorialFirst extends StatelessWidget {
               _header(),
               _body(),
               _body2(),
-              _button(),
+              Container(
+                alignment: const Alignment(0, 0.8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center, //가로축 중앙정렬
+                  children: [
+                    _previousButton(),
+                    const SizedBox(
+                      width: 200,
+                    ),
+                    _nextButton(),
+                  ],
+                ),
+              ),
             ],
           )
         ],
