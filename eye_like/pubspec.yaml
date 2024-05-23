@@ -88,6 +88,9 @@ flutter:
     - family: KyoboHandwriting2020
       fonts:
         - asset: assets/fonts/KyoboHandwriting2020pdy.ttf
+    - family: Segoe UI
+      fonts:
+        - asset: assets/fonts/segoeui.ttf
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

@@ -19,11 +19,11 @@ Widget _title() {
 }
 
 Widget _logoimage() {
-  return Align(
-    alignment: const Alignment(-0.1, 0), //이미지 가운데 정렬 안돼서 추가
-    child: SizedBox(
-      width: 220,
-      height: 200,
+  return SizedBox(
+    width: 220,
+    height: 200,
+    child: Padding(
+      padding: const EdgeInsets.fromLTRB(0, 0, 10, 0), //image 가운데 정렬
       child: Image.asset('assets/images/main_logo.png'),
     ),
   );
@@ -72,56 +72,60 @@ Widget _overlay() {
 }
 
 Widget _header() {
-  return const Positioned(
-    top: 100,
-    left: 100,
-    child: Column(
-      children: [
-        Text(
-          'EYE조아',
-          style: TextStyle(
-              fontSize: 46,
-              fontWeight: FontWeight.w700,
-              fontFamily: 'Cafe24 Ssurround'),
-        ),
-        Text(
-          '사용가이드',
-          style: TextStyle(
-            fontSize: 46,
-            fontWeight: FontWeight.w700,
+  return Center(
+    child: Transform.translate(
+      // UI 정중앙에 배치 후, 위치 조정
+      offset: const Offset(0, 100),
+      child: const Column(
+        children: [
+          Text(
+            'EYE조아',
+            style: TextStyle(
+                fontSize: 42,
+                fontWeight: FontWeight.w700,
+                fontFamily: 'Cafe24 Ssurround'),
           ),
-        ),
-      ],
+          Text(
+            '사용가이드',
+            style: TextStyle(
+                fontSize: 42,
+                fontWeight: FontWeight.w700,
+                fontFamily: 'Cafe24 Ssurround'),
+          ),
+        ],
+      ),
     ),
   );
 }
 
 Widget _body() {
-  return const Positioned(
-    top: 400,
-    left: 150,
-    child: Text(
-      '나에게 맞는\n모드를 선택해요!',
-      textAlign: TextAlign.center,
-      style: TextStyle(
-          fontSize: 28,
-          fontWeight: FontWeight.w300,
-          fontFamily: 'Cafe24 SsurroundAir'),
+  return Center(
+    child: Transform.translate(
+      offset: const Offset(75, 10),
+      child: const Text(
+        '나에게 맞는\n모드를 선택해요!',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.w300,
+            fontFamily: 'Cafe24 SsurroundAir'),
+      ),
     ),
   );
 }
 
 Widget _body2() {
-  return const Positioned(
-    top: 470,
-    left: 150,
-    child: Text(
-      '모드마다 읽어주는 정보가\n조금씩 달라요!',
-      textAlign: TextAlign.left,
-      style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w400,
-          fontFamily: 'KyoboHandwriting2020'),
+  return Center(
+    child: Transform.translate(
+      offset: const Offset(50, 65),
+      child: const Text(
+        '모드마다 읽어주는 정보가\n조금씩 달라요!',
+        textAlign: TextAlign.left,
+        style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+            fontFamily: 'KyoboHandwriting2020'),
+      ),
     ),
   );
 }
