@@ -1,3 +1,4 @@
+import 'package:eye_like/pages/app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -252,7 +253,7 @@ class _TutorialThirdState extends State<TutorialThird> {
   Widget _nextButton() {
     return IconButton(
       onPressed: () {
-        Get.to(const TutorialThird());
+        Get.to(const App());
       },
       icon: Image.asset('assets/images/next_button.png'),
     );

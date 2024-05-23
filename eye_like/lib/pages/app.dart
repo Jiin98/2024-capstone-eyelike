@@ -1,6 +1,10 @@
 import 'dart:io';
 
+import 'package:eye_like/components/mode_button_widget.dart';
 import 'package:eye_like/controllers/image_controller.dart';
+import 'package:eye_like/pages/allergy_first.dart';
+import 'package:eye_like/pages/basic_first.dart';
+import 'package:eye_like/pages/disease_first.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -38,69 +42,32 @@ class App extends StatelessWidget {
             const SizedBox(
               height: 24,
             ),
-            Container(
-              //components로 만들어주기
-              width: 280,
-              height: 50,
-              decoration: BoxDecoration(
-                color: const Color(0xffD9C55F),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Center(
-                child: TextButton(
-                  onPressed: () => controller.openCamera(), //카메라에 접근이 되는지 확인 필요
-                  child: const Text(
-                    '기본모드',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                    ),
-                  ),
-                ),
-              ),
+            ModeButtonWidget(
+              modename: '기본모드',
+              type: ModeButtonType.type2,
+              onPressed: () {
+                Get.to(const BasicFirst());
+              },
             ),
             const SizedBox(
               height: 16,
             ),
-            Container(
-              width: 280,
-              height: 50,
-              decoration: BoxDecoration(
-                color: const Color(0xffF27979),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Center(
-                child: Text(
-                  '질병모드',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                  ),
-                ),
-              ),
+            ModeButtonWidget(
+              modename: '질병모드',
+              type: ModeButtonType.type2,
+              onPressed: () {
+                Get.to(const DiseaseFirst());
+              },
             ),
             const SizedBox(
               height: 16,
             ),
-            Container(
-              width: 280,
-              height: 50,
-              decoration: BoxDecoration(
-                color: const Color(0xffF27979),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Center(
-                child: Text(
-                  '알레르기모드',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                  ),
-                ),
-              ),
+            ModeButtonWidget(
+              modename: '알레르기모드',
+              type: ModeButtonType.type2,
+              onPressed: () {
+                Get.to(AllergyFirst());
+              },
             ),
             // const SizedBox(
             //   height: 16,

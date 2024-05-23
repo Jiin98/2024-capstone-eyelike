@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-enum ModeButtonType { type1, type2 }
+enum SelectButtonType { type1, type2 }
 
-class ModeButtonWidget extends StatelessWidget {
+class SelectButtonWidget extends StatelessWidget {
   // StatelessWidget은 불변성을 지닌 클래스이므로, StatelessWidget의 모든 인스턴스는 final 선언
   final VoidCallback? onPressed;
   final String modename; // ?는 null값을 가질 수 있음을 의미
-  final ModeButtonType type;
+  final SelectButtonType type;
 
-  const ModeButtonWidget({
+  const SelectButtonWidget({
     Key? key,
     this.onPressed,
     required this.modename,
@@ -23,11 +23,11 @@ class ModeButtonWidget extends StatelessWidget {
       ),
       onPressed: onPressed, //onpressed에 대한 값을 받도록 설정
       child: Container(
-        width: 280,
-        height: 50,
+        width: 110,
+        height: 110,
         decoration: BoxDecoration(
           color: const Color(0xffD9C55F),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(15),
         ),
         child: Center(
           child: Text(
@@ -51,11 +51,11 @@ class ModeButtonWidget extends StatelessWidget {
       ),
       onPressed: onPressed,
       child: Container(
-        width: 280,
-        height: 50,
+        width: 110,
+        height: 110,
         decoration: BoxDecoration(
           color: const Color(0xffF27979),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(15),
         ),
         child: Center(
           child: Text(
@@ -74,9 +74,9 @@ class ModeButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     switch (type) {
-      case ModeButtonType.type1:
+      case SelectButtonType.type1:
         return type1widget();
-      case ModeButtonType.type2:
+      case SelectButtonType.type2:
         return type2widget();
     }
   }
