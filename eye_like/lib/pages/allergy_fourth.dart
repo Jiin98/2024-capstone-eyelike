@@ -7,21 +7,11 @@ class AllergyFourth extends StatelessWidget {
   AllergyFourth({super.key});
   final SelectController selectController = Get.put(SelectController());
 
-  Widget allergenButton(String name) {
+  Widget _selectToggleButton(String name) {
     return Obx(() => SelectButtonWidget(
-          modename: name,
-          type: selectController.allergens[name]!,
-          onPressed: () => selectController.toggleAllergenType(name),
-        ));
-  }
-
-  Widget inactiveButton(String name) { // 추후 수정 필요
-    return Opacity(
-        opacity: 0.0,
-        child: SelectButtonWidget(
-          modename: name,
-          type: selectController.allergens[name]!,
-          onPressed: null, // 버튼 비활성화
+          name: name,
+          type: selectController.isSelected[name]!,
+          onPressed: () => selectController.toggleIsSelected(name),
         ));
   }
 
@@ -99,31 +89,31 @@ class AllergyFourth extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              allergenButton('잣'), // 버튼 추후 수정 필요
+              _selectToggleButton('잣'), // 버튼 추후 수정 필요
               const SizedBox(
                 width: 30,
               ),
-              inactiveButton('잣'),
+              const SelectButtonWidget(type: SelectButtonType.type3),
             ],
           ),
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              inactiveButton('잣'),
-              const SizedBox(
+              SelectButtonWidget(type: SelectButtonType.type3),
+              SizedBox(
                 width: 30,
               ),
-              inactiveButton('잣'),
+              SelectButtonWidget(type: SelectButtonType.type3),
             ],
           ),
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              inactiveButton('잣'),
-              const SizedBox(
+              SelectButtonWidget(type: SelectButtonType.type3),
+              SizedBox(
                 width: 30,
               ),
-              inactiveButton('잣'),
+              SelectButtonWidget(type: SelectButtonType.type3),
             ],
           ),
           const SizedBox(

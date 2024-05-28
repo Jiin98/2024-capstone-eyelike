@@ -5,13 +5,13 @@ enum ModeButtonType { type1, type2 }
 class ModeButtonWidget extends StatelessWidget {
   // StatelessWidget은 불변성을 지닌 클래스이므로, StatelessWidget의 모든 인스턴스는 final 선언
   final VoidCallback? onPressed;
-  final String modename; // ?는 null값을 가질 수 있음을 의미
+  final String mode; // ?는 null값을 가질 수 있음을 의미
   final ModeButtonType type;
 
   const ModeButtonWidget({
     Key? key,
     this.onPressed,
-    required this.modename,
+    required this.mode,
     required this.type,
   }) : super(key: key);
 
@@ -31,7 +31,7 @@ class ModeButtonWidget extends StatelessWidget {
         ),
         child: Center(
           child: Text(
-            modename, //modename이 nullable할 때, ?? 연산자를 사용하면, null일 때, 반환값 설정할 수 있음
+            mode, //mode이 nullable할 때, ?? 연산자를 사용하면, null일 때, 반환값 설정할 수 있음
             style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -59,7 +59,7 @@ class ModeButtonWidget extends StatelessWidget {
         ),
         child: Center(
           child: Text(
-            modename,
+            mode,
             style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,

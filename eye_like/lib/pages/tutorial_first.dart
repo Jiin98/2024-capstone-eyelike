@@ -43,21 +43,21 @@ Widget _background() {
           height: 24,
         ),
         const ModeButtonWidget(
-          modename: '기본모드',
+          mode: '기본모드',
           type: ModeButtonType.type1,
         ),
         const SizedBox(
           height: 16,
         ),
         const ModeButtonWidget(
-          modename: '질병모드',
+          mode: '질병모드',
           type: ModeButtonType.type2,
         ),
         const SizedBox(
           height: 16,
         ),
         const ModeButtonWidget(
-          modename: '알레르기모드',
+          mode: '알레르기모드',
           type: ModeButtonType.type2,
         ),
       ],

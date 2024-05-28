@@ -1,9 +1,20 @@
+import 'package:eye_like/controllers/select_controller.dart';
 import 'package:eye_like/components/select_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class DiseaseFirst extends StatelessWidget {
-  const DiseaseFirst({super.key});
+  DiseaseFirst({super.key});
+  final SelectController selectController = Get.put(SelectController());
+
+  Widget _selectButton(String name) {
+    return Obx(() => SelectButtonWidget(
+          // Obx를 통해 상태 변화를 감지하고, 상태 변화가 일어나면 즉시 UI 업데이트
+          name: name,
+          type: selectController.isSelected[name]!,
+          onPressed: () => selectController.toggleIsSelected(name),
+        ));
+  }
 
   Widget _previousButton() {
     return TextButton(
@@ -76,42 +87,27 @@ class DiseaseFirst extends StatelessWidget {
           const SizedBox(
             height: 40,
           ),
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SelectButtonWidget(
-                modename: '당뇨병',
-                type: SelectButtonType.type2,
-              ),
-              SizedBox(
+              _selectButton('당뇨병'),
+              const SizedBox(
                 width: 30,
               ),
-              SelectButtonWidget(
-                modename: '고혈압',
-                type: SelectButtonType.type2,
-              ),
+              _selectButton('고혈압'),
             ],
           ),
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SelectButtonWidget(
-                modename: '비만',
-                type: SelectButtonType.type2,
-              ),
-              SizedBox(
+              _selectButton('비만'),
+              const SizedBox(
                 width: 30,
               ),
-              SelectButtonWidget(
-                modename: '암',
-                type: SelectButtonType.type2,
-              ),
+              _selectButton('암'),
             ],
           ),
-          const SelectButtonWidget(
-            modename: '뇌졸증',
-            type: SelectButtonType.type2,
-          ),
+          _selectButton('뇌졸증'),
           const SizedBox(
             height: 40,
           ),

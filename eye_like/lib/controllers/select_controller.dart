@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:eye_like/components/select_button_widget.dart';
 
 class SelectController extends GetxController {
-  final RxMap<String, SelectButtonType> allergens = { //코드가 어떤 의미인지 알아봐야함
+  final RxMap<String, SelectButtonType> isSelected = {  // Map은 key: value형태의 자료형
     '난류': SelectButtonType.type2,
     '우유': SelectButtonType.type2,
     '메밀': SelectButtonType.type2,
@@ -24,7 +24,7 @@ class SelectController extends GetxController {
     '잣': SelectButtonType.type2,
   }.obs;
 
-  void toggleAllergenType(String allergen) {
-    allergens[allergen] = allergens[allergen] == SelectButtonType.type2 ? SelectButtonType.type1 : SelectButtonType.type2;
+  void toggleIsSelected(String name) {  // 버튼이 눌려지면, key값을 받아오고, 해당 value인 type을 확인한 후, type 변환
+    isSelected[name] = isSelected[name] == SelectButtonType.type2 ? SelectButtonType.type1 : SelectButtonType.type2;
   }
 }

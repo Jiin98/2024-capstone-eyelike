@@ -43,27 +43,27 @@ class App extends StatelessWidget {
               height: 24,
             ),
             ModeButtonWidget(
-              modename: '기본모드',
+              mode: '기본모드',
               type: ModeButtonType.type2,
               onPressed: () {
-                Get.to(const BasicFirst());
+                Get.to(BasicFirst());
               },
             ),
             const SizedBox(
               height: 16,
             ),
             ModeButtonWidget(
-              modename: '질병모드',
+              mode: '질병모드',
               type: ModeButtonType.type2,
               onPressed: () {
-                Get.to(const DiseaseFirst());
+                Get.to(DiseaseFirst());
               },
             ),
             const SizedBox(
               height: 16,
             ),
             ModeButtonWidget(
-              modename: '알레르기모드',
+              mode: '알레르기모드',
               type: ModeButtonType.type2,
               onPressed: () {
                 Get.to(AllergyFirst());

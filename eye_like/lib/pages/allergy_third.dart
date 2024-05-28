@@ -8,11 +8,11 @@ class AllergyThird extends StatelessWidget {
   AllergyThird({super.key});
   final SelectController selectController = Get.put(SelectController());
 
-  Widget allergenButton(String name) {
+  Widget _selectToggleButton(String name) {
     return Obx(() => SelectButtonWidget(
-          modename: name,
-          type: selectController.allergens[name]!,
-          onPressed: () => selectController.toggleAllergenType(name),
+          name: name,
+          type: selectController.isSelected[name]!,
+          onPressed: () => selectController.toggleIsSelected(name),
         ));
   }
 
@@ -92,31 +92,31 @@ class AllergyThird extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              allergenButton('호두'),
+              _selectToggleButton('호두'),
               const SizedBox(
                 width: 30,
               ),
-              allergenButton('닭고기'),
+              _selectToggleButton('닭고기'),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              allergenButton('쇠고기'),
+              _selectToggleButton('쇠고기'),
               const SizedBox(
                 width: 30,
               ),
-              allergenButton('아황산류'),
+              _selectToggleButton('아황산류'),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              allergenButton('오징어'),
+              _selectToggleButton('오징어'),
               const SizedBox(
                 width: 30,
               ),
-              allergenButton('조개'),
+              _selectToggleButton('조개'),
             ],
           ),
           const SizedBox(
