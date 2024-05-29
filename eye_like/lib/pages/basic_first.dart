@@ -1,12 +1,60 @@
 import 'dart:io';
 
 import 'package:eye_like/controllers/image_controller.dart';
+import 'package:eye_like/controllers/text_recognition_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
 
 class BasicFirst extends StatelessWidget {
   BasicFirst({super.key});
   final ImageController controller = Get.put(ImageController());
+
+  final TextRecognitionService _textRecognitionService =
+      TextRecognitionService();
+  Future<void> extractText(BuildContext context) async {
+    final ByteData data = await rootBundle.load('assets/images/food_label.png');
+    final Uint8List bytes = data.buffer.asUint8List();
+    final Directory tempDir = await getTemporaryDirectory();
+    final File imageFile =
+        await File('${tempDir.path}/food_label.png').writeAsBytes(bytes);
+
+    try {
+      String extractedText =
+          await _textRecognitionService.recognizeTextFromImage(imageFile);
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: Text(extractedText),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
+      );
+    } catch (e) {
+      print('오류 발생: $e');
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: Text('오류가 발생했습니다: $e'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
+      );
+    }
+  }
 
   Widget _previousButton() {
     return TextButton(
@@ -38,13 +86,13 @@ class BasicFirst extends StatelessWidget {
     );
   }
 
-  Widget _nextButton() {
+  Widget _nextButton(BuildContext context) {
     return TextButton(
       style: ButtonStyle(
         splashFactory: NoSplash.splashFactory,
         overlayColor: MaterialStateProperty.all(Colors.transparent),
       ),
-      onPressed: () {}, //onpressed에 대한 값을 받도록 설정
+      onPressed: () => extractText(context), //onpressed에 대한 값을 받도록 설정
       child: Container(
         width: 110,
         height: 60,
@@ -102,7 +150,7 @@ class BasicFirst extends StatelessWidget {
               const SizedBox(
                 width: 30,
               ),
-              _nextButton(),
+              _nextButton(context),
             ],
           ),
         ],
