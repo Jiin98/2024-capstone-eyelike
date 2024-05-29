@@ -9,12 +9,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class App extends StatelessWidget {
-  const App({super.key});
+  App({super.key});
+  final ImageController controller = Get.put(ImageController());
 
   @override
   Widget build(BuildContext context) {
-    final ImageController controller = Get.put(ImageController());
-
     return Scaffold(
       body: Center(
         child: Column(
@@ -45,6 +44,10 @@ class App extends StatelessWidget {
             ModeButtonWidget(
               mode: '기본모드',
               type: ModeButtonType.type2,
+              // onPressed: () async {  // 카메라 촬영 되는지 확인 및 BasicFirst UI에 업데이트가 되는지 확인 필요
+              //   await controller.openCamera();
+              //   Get.to(BasicFirst());
+              // },
               onPressed: () {
                 Get.to(BasicFirst());
               },
@@ -69,22 +72,6 @@ class App extends StatelessWidget {
                 Get.to(AllergyFirst());
               },
             ),
-            // const SizedBox(
-            //   height: 16,
-            // ),
-            // Obx(
-            //   () => controller.imageFile.value != null //카메라 이미지 업데이트 되는지 확인 필요
-            //       ? Image.file(
-            //           File(controller.imageFile.value!.path),
-            //           width: 100,
-            //           height: 100,
-            //         )
-            //       : Container(
-            //           width: 100,
-            //           height: 100,
-            //           color: Colors.grey,
-            //         ),
-            // ),
           ],
         ),
       ),

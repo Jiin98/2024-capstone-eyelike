@@ -253,7 +253,7 @@ class _TutorialThirdState extends State<TutorialThird> {
   Widget _nextButton() {
     return IconButton(
       onPressed: () {
-        Get.to(const App());
+        Get.to(App());
       },
       icon: Image.asset('assets/images/next_button.png'),
     );

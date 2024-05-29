@@ -1,8 +1,12 @@
+import 'dart:io';
+
+import 'package:eye_like/controllers/image_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class BasicFirst extends StatelessWidget {
-  const BasicFirst({super.key});
+  BasicFirst({super.key});
+  final ImageController controller = Get.put(ImageController());
 
   Widget _previousButton() {
     return TextButton(
@@ -75,6 +79,22 @@ class BasicFirst extends StatelessWidget {
           const SizedBox(
             height: 40,
           ),
+          // Obx(
+          //   () => controller.imageFile.value != null //카메라 이미지 업데이트 되는지 확인 필요
+          //       ? Image.file(
+          //           File(controller.imageFile.value!.path),
+          //           width: 250,
+          //           height: 250,
+          //         )
+          //       : Container(
+          //           width: 250,
+          //           height: 250,
+          //           color: Colors.grey,
+          //         ),
+          // ),
+          // const SizedBox(
+          //   height: 40,
+          // ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
