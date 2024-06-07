@@ -53,5 +53,11 @@
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Used to demonstrate image picker plugin</string>
 	<!-- -->
+	<!-- tts 권한 설정 -->
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We need your microphone to make TTS work.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>We need your microphone to make TTS work.</string>
+	<!-- -->
 </dict>
 </plist>
