@@ -49,7 +49,7 @@ class App extends StatelessWidget {
               //   Get.to(BasicFirst());
               // },
               onPressed: () {
-                Get.to(BasicFirst());
+                Get.to(const BasicFirst());
               },
             ),
             const SizedBox(

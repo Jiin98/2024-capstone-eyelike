@@ -1,11 +1,11 @@
 import 'package:eye_like/components/select_button_widget.dart';
-import 'package:eye_like/controllers/select_controller.dart';
+import 'package:eye_like/controllers/select_controller_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AllergyFourth extends StatelessWidget {
   AllergyFourth({super.key});
-  final SelectController selectController = Get.put(SelectController());
+  final SelectController2 selectController = Get.put(SelectController2());
 
   Widget _selectToggleButton(String name) {
     return Obx(() => SelectButtonWidget(

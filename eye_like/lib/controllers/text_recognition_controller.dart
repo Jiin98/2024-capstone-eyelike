@@ -12,22 +12,8 @@ class TextRecognitionService {
 
     String text = '';
     for (TextBlock block in recognizedText.blocks) {
-      for (TextLine line in block.lines) {
-        for (TextElement element in line.elements) {
-          text += '${element.text}\n';
-        }
-      }
+        text += '${block.text}\n';
     }
-
-    // String text = '';
-    // for (TextBlock block in recognizedText.blocks) {
-    //   for (TextLine line in block.lines) {
-    //     for (TextElement element in line.elements) {
-    //       text += '${element.text} ';  // 각 element 뒤에 공백을 추가하여 구분
-    //     }
-    //     text += '\n';  // 각 줄의 끝에 줄바꿈 문자 추가
-    //   }
-    // }
 
     textRecognizer.close();
     return text;

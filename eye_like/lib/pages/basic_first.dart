@@ -7,52 +7,41 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 
-class BasicFirst extends StatelessWidget {
-  BasicFirst({super.key});
-  final ImageController controller = Get.put(ImageController());
+class BasicFirst extends StatefulWidget {
+  const BasicFirst({super.key});
 
+  @override
+  State<BasicFirst> createState() => _BasicFirstState();
+}
+
+class _BasicFirstState extends State<BasicFirst> {
+  ImageController controller = Get.put(ImageController());
+  String extractedText = '';
   final TextRecognitionService _textRecognitionService =
       TextRecognitionService();
-  Future<void> extractText(BuildContext context) async {
-    final ByteData data = await rootBundle.load('assets/images/food_label.png');
-    final Uint8List bytes = data.buffer.asUint8List();
-    final Directory tempDir = await getTemporaryDirectory();
-    final File imageFile =
-        await File('${tempDir.path}/food_label.png').writeAsBytes(bytes);
+
+  @override
+  void initState() {
+    super.initState();
+    extractText();
+  }
+
+  Future<void> extractText() async {
+    //텍스트 추출
+    ByteData data = await rootBundle.load('assets/images/food_label_5.jpeg');
+    Uint8List bytes = data.buffer.asUint8List();
+    Directory tempDir = await getTemporaryDirectory();
+    File imageFile =
+        await File('${tempDir.path}/food_label_5.jpeg').writeAsBytes(bytes);
 
     try {
-      String extractedText =
+      String text =
           await _textRecognitionService.recognizeTextFromImage(imageFile);
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          content: Text(extractedText),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Close'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        ),
-      );
+      setState(() {
+        extractedText = text;
+      });
     } catch (e) {
-      print('오류 발생: $e');
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          content: Text('오류가 발생했습니다: $e'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Close'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        ),
-      );
+      print('Error: $e');
     }
   }
 
@@ -86,13 +75,13 @@ class BasicFirst extends StatelessWidget {
     );
   }
 
-  Widget _nextButton(BuildContext context) {
+  Widget _nextButton() {
     return TextButton(
       style: ButtonStyle(
         splashFactory: NoSplash.splashFactory,
         overlayColor: MaterialStateProperty.all(Colors.transparent),
       ),
-      onPressed: () => extractText(context), //onpressed에 대한 값을 받도록 설정
+      onPressed: () {}, //onpressed에 대한 값을 받도록 설정
       child: Container(
         width: 110,
         height: 60,
@@ -127,6 +116,11 @@ class BasicFirst extends StatelessWidget {
           const SizedBox(
             height: 40,
           ),
+          SizedBox(
+            width: 250,
+            height: 250,
+            child: Text(extractedText),
+          ),
           // Obx(
           //   () => controller.imageFile.value != null //카메라 이미지 업데이트 되는지 확인 필요
           //       ? Image.file(
@@ -150,7 +144,7 @@ class BasicFirst extends StatelessWidget {
               const SizedBox(
                 width: 30,
               ),
-              _nextButton(context),
+              _nextButton(),
             ],
           ),
         ],

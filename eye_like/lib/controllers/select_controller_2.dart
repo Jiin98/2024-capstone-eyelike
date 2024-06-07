@@ -1,14 +1,9 @@
 import 'package:get/get.dart';
 import 'package:eye_like/components/select_button_widget.dart';
 
-class SelectController extends GetxController {
+class SelectController2 extends GetxController {
   final RxMap<String, SelectButtonType> isSelected = {
     // Map은 key: value형태의 자료형
-    '당뇨병': SelectButtonType.type2,
-    '고혈압': SelectButtonType.type2,
-    '비만': SelectButtonType.type2,
-    '암': SelectButtonType.type2,
-    '뇌졸증': SelectButtonType.type2,
     '난류': SelectButtonType.type2,
     '우유': SelectButtonType.type2,
     '메밀': SelectButtonType.type2,

@@ -1,11 +1,11 @@
-import 'package:eye_like/controllers/select_controller.dart';
+import 'package:eye_like/controllers/select_controller_1.dart';
 import 'package:eye_like/components/select_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class DiseaseFirst extends StatelessWidget {
   DiseaseFirst({super.key});
-  final SelectController selectController = Get.put(SelectController());
+  final SelectController1 selectController = Get.put(SelectController1());
 
   Widget _selectButton(String name) {
     return Obx(() => SelectButtonWidget(
