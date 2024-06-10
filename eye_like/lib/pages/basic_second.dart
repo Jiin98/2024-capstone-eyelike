@@ -4,21 +4,20 @@ import 'package:eye_like/controllers/image_controller.dart';
 import 'package:eye_like/controllers/text_comment_controller.dart';
 import 'package:eye_like/controllers/text_recognition_controller.dart';
 import 'package:eye_like/pages/app.dart';
-import 'package:eye_like/pages/basic_second.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 
-class BasicFirst extends StatefulWidget {
-  const BasicFirst({super.key});
+class BasicSecond extends StatefulWidget {
+  const BasicSecond({super.key});
 
   @override
-  State<BasicFirst> createState() => _BasicFirstState();
+  State<BasicSecond> createState() => _BasicSecondState();
 }
 
-class _BasicFirstState extends State<BasicFirst> {
+class _BasicSecondState extends State<BasicSecond> {
   ImageController controller = Get.put(ImageController());
   TextCommentController commentController = Get.put(TextCommentController());
   String extractedText = '';
@@ -52,15 +51,16 @@ class _BasicFirstState extends State<BasicFirst> {
   //     print('Error: $e');
   //   }
   // }
+
   Future<void> extractText() async {
-    // 텍스트 추출
+    //텍스트 추출
     ByteData data = await rootBundle.load('assets/images/food_label_7.jpeg');
     Uint8List bytes = data.buffer.asUint8List();
     Directory tempDir = await getTemporaryDirectory();
     File imageFile =
         await File('${tempDir.path}/food_label_7.jpeg').writeAsBytes(bytes);
 
-    try {
+   try {
       String text =
           await _textRecognitionService.recognizeTextFromImage(imageFile);
 
@@ -108,7 +108,7 @@ class _BasicFirstState extends State<BasicFirst> {
 
       // 모든 성분 정보를 commentController에 넘겨줌
       String combinedText = '';
-      for (var nutrientInfo in nutrientInfoList) {
+      nutrientInfoList.forEach((nutrientInfo) {
         commentController.updateComment(
           nutrientInfo['nutrient'] ?? '',
           nutrientInfo['value'] ?? '',
@@ -116,14 +116,11 @@ class _BasicFirstState extends State<BasicFirst> {
         );
         combinedText +=
             '${nutrientInfo['nutrient']} ${nutrientInfo['value']} ${nutrientInfo['unit']}\n';
-      }
-
-      commentController.finalizeComment();
+      });
 
       setState(() {
         extractedText = regexExtractedText;
-        // _speak(combinedText); // 전체 텍스트 확인 코드
-        _speak(commentController.comment.value);
+        _speak(combinedText.trim());
       });
     } catch (e) {
       print('Error: $e');
@@ -183,7 +180,7 @@ class _BasicFirstState extends State<BasicFirst> {
                           ),
                         ),
                       ],
-                    ), // 전체 텍스트 추출 확인 코드
+                    ),
                   ),
                   // Obx(
                   //   () => controller.imageFile.value != null //카메라 이미지 업데이트 되는지 확인 필요
@@ -207,56 +204,27 @@ class _BasicFirstState extends State<BasicFirst> {
             const SizedBox(
               height: 50,
             ),
-            Column(
-              children: [
-                TextButton(
-                  onPressed: () {
-                    Get.to(const BasicSecond());
-                  },
-                  child: Container(
-                    width: 280,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: const Color(0xff30D979),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Center(
-                        child: Text(
-                      '모든정보듣기',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
-                      ),
-                    )),
+            TextButton(
+              onPressed: () {
+                Get.to(App());
+              },
+              child: Container(
+                width: 280,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: const Color(0xff30D979),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Center(
+                    child: Text(
+                  '종료',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
                   ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextButton(
-                  onPressed: () {
-                    Get.to(App());
-                  },
-                  child: Container(
-                    width: 280,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: const Color(0xff30D979),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Center(
-                        child: Text(
-                      '종료',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
-                      ),
-                    )),
-                  ),
-                ),
-              ],
+                )),
+              ),
             ),
           ],
         ),
