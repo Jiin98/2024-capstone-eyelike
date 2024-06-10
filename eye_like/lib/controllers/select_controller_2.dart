@@ -31,4 +31,8 @@ class SelectController2 extends GetxController {
         ? SelectButtonType.type1
         : SelectButtonType.type2;
   }
+
+  void resetSelections() {
+    isSelected.updateAll((key, value) => SelectButtonType.type2);
+  }
 }

@@ -26,6 +26,7 @@ class DiseaseFirst extends StatelessWidget {
         overlayColor: MaterialStateProperty.all(Colors.transparent),
       ),
       onPressed: () {
+        selectController.resetSelections();
         Get.back();
       },
       child: Container(

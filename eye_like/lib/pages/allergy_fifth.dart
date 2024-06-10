@@ -1,28 +1,31 @@
 import 'dart:io';
 
+import 'package:eye_like/controllers/allergy_fifth_controller.dart';
+import 'package:eye_like/controllers/high_blood_pressure_controller.dart';
 import 'package:eye_like/controllers/image_controller.dart';
-import 'package:eye_like/controllers/obesity_controller.dart';
-import 'package:eye_like/controllers/select_controller_1.dart';
+import 'package:eye_like/controllers/select_controller_2.dart';
 import 'package:eye_like/controllers/text_recognition_controller.dart';
 import 'package:eye_like/pages/app.dart';
-import 'package:eye_like/pages/basic_second.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 
-class Obesity extends StatefulWidget {
-  const Obesity({super.key});
+class AllergyFifth extends StatefulWidget {
+  final List<String> selectedAllergies;
+
+  const AllergyFifth({Key? key, required this.selectedAllergies})
+      : super(key: key);
 
   @override
-  State<Obesity> createState() => _ObesityState();
+  State<AllergyFifth> createState() => _AllergyFifthState();
 }
 
-class _ObesityState extends State<Obesity> {
-  final SelectController1 selectController = Get.put(SelectController1());
+class _AllergyFifthState extends State<AllergyFifth> {
+  final SelectController2 selectController = Get.put(SelectController2());
   ImageController controller = Get.put(ImageController());
-  ObesityController commentController = Get.put(ObesityController());
+  AllergyFifthController commentController = Get.put(AllergyFifthController());
   String extractedText = '';
   String highText = '';
   final TextRecognitionService _textRecognitionService =
@@ -68,63 +71,42 @@ class _ObesityState extends State<Obesity> {
 
       // 정규표현식 패턴
       RegExp regExp = RegExp(
-          r'(트랜스지방|포화지방|지방|당류|나트륨|탄수화물|단백질|콜레스테롤|식이섬유|섬유질)\s*([\d,.]+)\s*(mg|g|ml)?');
+          r'(난류|우유|메밀|땅콩|대두|밀|고등어|게|새우|돼지고기|복숭아|토마토|아황산류|호두|닭고기|쇠고기|오징어|조개류|잣)');
       // 매칭 결과
       Iterable<RegExpMatch> matches = regExp.allMatches(text);
 
-      List<Map<String, String>> nutrientInfoList = [];
+      List<String> allergyInfoList = [];
 
       // 후처리 및 모든 성분 정보 저장
       String regexExtractedText = matches.map((match) {
         String nutrient = match.group(1) ?? '';
-        String value = match.group(2) ?? '';
-        String unit = match.group(3) ?? '';
 
-        // 숫자 뒤의 불필요한 문자를 제거
-        value =
-            value.replaceAll(RegExp(r'\D$'), ''); // 숫자 뒤에 오는 텍스트가 g이 아닌 9이면 제거
+        allergyInfoList.add(nutrient);
 
-        double numericValue =
-            double.tryParse(value) ?? 0; // 소수 존재하기 때문에 double 변수 사용
-
-        // 단위를 통일하여 mg인 경우 g으로 환산
-        if (unit == 'mg') {
-          numericValue /= 1000;
-          value = numericValue.toString();
-          unit = 'g';
-        }
-
-        // 각 성분의 정보를 리스트에 저장
-        nutrientInfoList.add({
-          'nutrient': nutrient,
-          'value': value,
-          'unit': unit,
-        });
-
-        if (unit.isEmpty) {
-          unit = 'g'; // 9 대신 g으로 변경
-        }
-
-        return '$nutrient $value $unit';
+        return nutrient;
       }).join('\n');
 
       // 모든 성분 정보를 commentController에 넘겨줌
       String combinedText = '';
-      for (var nutrientInfo in nutrientInfoList) {
+      for (var nutrient in allergyInfoList) {
         commentController.updateComment(
-          nutrientInfo['nutrient'] ?? '',
-          nutrientInfo['value'] ?? '',
-          nutrientInfo['unit'] ?? '',
+          nutrient,
         );
-        combinedText +=
-            '${nutrientInfo['nutrient']} ${nutrientInfo['value']} ${nutrientInfo['unit']}\n';
+        combinedText += '$nutrient\n';
       }
 
       commentController.finalizeComment();
 
       setState(() {
         extractedText = regexExtractedText;
-        // _speak(combinedText); // 전체 텍스트 확인 코드
+
+        // 선택된 알레르기 성분과 매칭되는지 확인
+        for (String allergy in widget.selectedAllergies) {
+          if (extractedText.contains(allergy)) {
+            commentController.updateComment(allergy);
+          }
+        }
+
         _speak(commentController.comment.value);
         _showMessageDialog(commentController.mostExtremeMessage.value,
             commentController.mostExtremeMessageType.value);
@@ -216,7 +198,7 @@ class _ObesityState extends State<Obesity> {
                 Padding(
                   padding: EdgeInsets.all(20),
                   child: Text(
-                    message,
+                    commentController.comment.value,
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 23,

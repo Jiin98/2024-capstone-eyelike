@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:eye_like/controllers/image_controller.dart';
+import 'package:eye_like/controllers/diabetes_controller.dart';
 import 'package:eye_like/controllers/select_controller_1.dart';
-import 'package:eye_like/controllers/text_comment_controller.dart';
 import 'package:eye_like/controllers/text_recognition_controller.dart';
 import 'package:eye_like/pages/app.dart';
 import 'package:eye_like/pages/basic_second.dart';
@@ -22,7 +22,7 @@ class Diabetes extends StatefulWidget {
 class _DiabetesState extends State<Diabetes> {
   final SelectController1 selectController = Get.put(SelectController1());
   ImageController controller = Get.put(ImageController());
-  TextCommentController commentController = Get.put(TextCommentController());
+  DiabetesController commentController = Get.put(DiabetesController());
   String extractedText = '';
   String highText = '';
   final TextRecognitionService _textRecognitionService =
@@ -68,7 +68,7 @@ class _DiabetesState extends State<Diabetes> {
 
       // 정규표현식 패턴
       RegExp regExp = RegExp(
-          r'(트랜스지방|포화지방|지방|당류|나트륨|탄수화물|단백질|콜레스테롤)\s*([\d,.]+)\s*(mg|g)?');
+          r'(트랜스지방|포화지방|지방|당류|나트륨|탄수화물|단백질|콜레스테롤|식이섬유|섬유질)\s*([\d,.]+)\s*(mg|g|ml)?');
       // 매칭 결과
       Iterable<RegExpMatch> matches = regExp.allMatches(text);
 
@@ -126,6 +126,8 @@ class _DiabetesState extends State<Diabetes> {
         extractedText = regexExtractedText;
         // _speak(combinedText); // 전체 텍스트 확인 코드
         _speak(commentController.comment.value);
+        _showMessageDialog(commentController.mostExtremeMessage.value,
+            commentController.mostExtremeMessageType.value);
       });
     } catch (e) {
       print('Error: $e');
@@ -142,6 +144,92 @@ class _DiabetesState extends State<Diabetes> {
       await flutterTts.speak(line);
       await Future.delayed(const Duration(seconds: 1)); // 줄마다 1초 멈춤
     }
+  }
+
+  Future<void> _stopTts() async {
+    await flutterTts.stop();
+  }
+
+  void _showMessageDialog(String message, String type) {
+    Color dialogColor;
+
+    if (type == 'positive') {
+      dialogColor = Colors.green;
+    } else if (type == 'negative') {
+      dialogColor = Color(0xffFF0000);
+    } else {
+      dialogColor = Color(0xff001AFF);
+    }
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            side: BorderSide(color: dialogColor, width: 2),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Container(
+            height: 300,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: dialogColor, width: 2), // 테두리 설정
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: dialogColor,
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(10)),
+                  ),
+                  child: Stack(
+                    children: [
+                      const Center(
+                        child: Text(
+                          '알림',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        right: 0,
+                        child: GestureDetector(
+                          onTap: () {
+                            _stopTts();
+                            Navigator.of(context).pop();
+                          },
+                          child: const Icon(
+                            Icons.close,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Text(
+                    message,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 23,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -213,7 +301,8 @@ class _DiabetesState extends State<Diabetes> {
               children: [
                 TextButton(
                   onPressed: () {
-                    Get.to(const BasicSecond());
+                    _stopTts();
+                    commentController.resetComment();
                   },
                   child: Container(
                     width: 280,
@@ -238,8 +327,10 @@ class _DiabetesState extends State<Diabetes> {
                 ),
                 TextButton(
                   onPressed: () {
+                    _stopTts();
                     Get.to(App());
                     selectController.resetSelections();
+                    commentController.resetComment();
                   },
                   child: Container(
                     width: 280,

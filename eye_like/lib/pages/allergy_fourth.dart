@@ -1,5 +1,6 @@
 import 'package:eye_like/components/select_button_widget.dart';
 import 'package:eye_like/controllers/select_controller_2.dart';
+import 'package:eye_like/pages/allergy_fifth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -51,7 +52,16 @@ class AllergyFourth extends StatelessWidget {
         splashFactory: NoSplash.splashFactory,
         overlayColor: MaterialStateProperty.all(Colors.transparent),
       ),
-      onPressed: () {},
+      onPressed: () {
+        // 선택된 알레르기 성분을 가져옴
+        List<String> selectedAllergies = selectController.isSelected.entries
+            .where((entry) => entry.value == SelectButtonType.type1)
+            .map((entry) => entry.key)
+            .toList();
+
+        // AllergyFifth 페이지로 이동하면서 선택된 알레르기 성분을 넘겨줌
+        Get.to(() => AllergyFifth(selectedAllergies: selectedAllergies));
+      },
       child: Container(
         width: 110,
         height: 60,
