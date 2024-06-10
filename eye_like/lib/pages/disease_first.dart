@@ -1,5 +1,8 @@
 import 'package:eye_like/controllers/select_controller_1.dart';
 import 'package:eye_like/components/select_button_widget.dart';
+import 'package:eye_like/pages/diabetes_first.dart';
+import 'package:eye_like/pages/high_blood_pressure_first.dart';
+import 'package:eye_like/pages/obesity_first.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -7,7 +10,7 @@ class DiseaseFirst extends StatelessWidget {
   DiseaseFirst({super.key});
   final SelectController1 selectController = Get.put(SelectController1());
 
-  Widget _selectButton(String name) {
+  Widget _selectToggleButton(String name) {
     return Obx(() => SelectButtonWidget(
           // Obx를 통해 상태 변화를 감지하고, 상태 변화가 일어나면 즉시 UI 업데이트
           name: name,
@@ -52,7 +55,17 @@ class DiseaseFirst extends StatelessWidget {
         splashFactory: NoSplash.splashFactory,
         overlayColor: MaterialStateProperty.all(Colors.transparent),
       ),
-      onPressed: () {}, //onpressed에 대한 값을 받도록 설정
+      onPressed: () {
+        if (selectController.isSelected['당뇨병'] == SelectButtonType.type1) {
+          Get.to(const Diabetes());
+        } else if (selectController.isSelected['고혈압'] ==
+            SelectButtonType.type1) {
+          Get.to(const HighBloodPressure());
+        } else if (selectController.isSelected['비만'] ==
+            SelectButtonType.type1) {
+          Get.to(const Obesity());
+        }
+      },
       child: Container(
         width: 110,
         height: 60,
@@ -90,24 +103,23 @@ class DiseaseFirst extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _selectButton('당뇨병'),
+              _selectToggleButton('당뇨병'),
               const SizedBox(
                 width: 30,
               ),
-              _selectButton('고혈압'),
+              _selectToggleButton('고혈압'),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _selectButton('비만'),
+              _selectToggleButton('비만'),
               const SizedBox(
                 width: 30,
               ),
-              _selectButton('암'),
+              const SelectButtonWidget(type: SelectButtonType.type3),
             ],
           ),
-          _selectButton('뇌졸증'),
           const SizedBox(
             height: 40,
           ),

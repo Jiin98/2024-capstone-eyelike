@@ -20,11 +20,12 @@ class BasicSecond extends StatefulWidget {
 class _BasicSecondState extends State<BasicSecond> {
   ImageController controller = Get.put(ImageController());
   TextCommentController commentController = Get.put(TextCommentController());
-  String extractedText = '';
   String highText = '';
   final TextRecognitionService _textRecognitionService =
       TextRecognitionService();
   FlutterTts flutterTts = FlutterTts();
+  var extractedText = ''.obs; 
+  var _isSpeaking = false.obs; 
 
   @override
   void initState() {
@@ -60,7 +61,7 @@ class _BasicSecondState extends State<BasicSecond> {
     File imageFile =
         await File('${tempDir.path}/food_label_7.jpeg').writeAsBytes(bytes);
 
-   try {
+    try {
       String text =
           await _textRecognitionService.recognizeTextFromImage(imageFile);
 
@@ -108,7 +109,7 @@ class _BasicSecondState extends State<BasicSecond> {
 
       // 모든 성분 정보를 commentController에 넘겨줌
       String combinedText = '';
-      nutrientInfoList.forEach((nutrientInfo) {
+      for (var nutrientInfo in nutrientInfoList) {
         commentController.updateComment(
           nutrientInfo['nutrient'] ?? '',
           nutrientInfo['value'] ?? '',
@@ -116,10 +117,10 @@ class _BasicSecondState extends State<BasicSecond> {
         );
         combinedText +=
             '${nutrientInfo['nutrient']} ${nutrientInfo['value']} ${nutrientInfo['unit']}\n';
-      });
+      }
 
       setState(() {
-        extractedText = regexExtractedText;
+        extractedText.value = regexExtractedText;
         _speak(combinedText.trim());
       });
     } catch (e) {
@@ -131,12 +132,28 @@ class _BasicSecondState extends State<BasicSecond> {
     await flutterTts.setLanguage('ko-KR');
     await flutterTts.setSpeechRate(0.3); // 속도 조절 (0.0 ~ 1.0)
 
+    setState(() {
+      _isSpeaking.value = true;
+    });
+
     // 줄바꿈 문자를 인식하여 잠시 멈추기
     List<String> lines = text.split('\n');
     for (String line in lines) {
+      if (!_isSpeaking.value) break;
       await flutterTts.speak(line);
       await Future.delayed(const Duration(seconds: 1)); // 줄마다 1초 멈춤
     }
+
+    setState(() {
+      _isSpeaking.value = false;
+    });
+  }
+
+  Future<void> _stopTts() async {
+    setState(() {
+      _isSpeaking.value = false;
+    });
+    await flutterTts.stop();
   }
 
   @override
@@ -173,7 +190,7 @@ class _BasicSecondState extends State<BasicSecond> {
                           height: 20,
                         ),
                         Text(
-                          extractedText,
+                          extractedText.value,
                           style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w400,
@@ -205,7 +222,8 @@ class _BasicSecondState extends State<BasicSecond> {
               height: 50,
             ),
             TextButton(
-              onPressed: () {
+              onPressed: () async {
+                await _stopTts();
                 Get.to(App());
               },
               child: Container(

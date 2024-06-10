@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:eye_like/controllers/image_controller.dart';
+import 'package:eye_like/controllers/select_controller_1.dart';
 import 'package:eye_like/controllers/text_comment_controller.dart';
 import 'package:eye_like/controllers/text_recognition_controller.dart';
 import 'package:eye_like/pages/app.dart';
@@ -11,17 +12,18 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 
-class BasicFirst extends StatefulWidget {
-  const BasicFirst({super.key});
+class Diabetes extends StatefulWidget {
+  const Diabetes({super.key});
 
   @override
-  State<BasicFirst> createState() => _BasicFirstState();
+  State<Diabetes> createState() => _DiabetesState();
 }
 
-class _BasicFirstState extends State<BasicFirst> {
+class _DiabetesState extends State<Diabetes> {
+  final SelectController1 selectController = Get.put(SelectController1());
   ImageController controller = Get.put(ImageController());
   TextCommentController commentController = Get.put(TextCommentController());
-  var extractedText = ''.obs;
+  String extractedText = '';
   String highText = '';
   final TextRecognitionService _textRecognitionService =
       TextRecognitionService();
@@ -121,7 +123,7 @@ class _BasicFirstState extends State<BasicFirst> {
       commentController.finalizeComment();
 
       setState(() {
-        extractedText.value = regexExtractedText;
+        extractedText = regexExtractedText;
         // _speak(combinedText); // 전체 텍스트 확인 코드
         _speak(commentController.comment.value);
       });
@@ -140,10 +142,6 @@ class _BasicFirstState extends State<BasicFirst> {
       await flutterTts.speak(line);
       await Future.delayed(const Duration(seconds: 1)); // 줄마다 1초 멈춤
     }
-  }
-
-  Future<void> _stopTts() async {
-    await flutterTts.stop();
   }
 
   @override
@@ -180,7 +178,7 @@ class _BasicFirstState extends State<BasicFirst> {
                           height: 20,
                         ),
                         Text(
-                          extractedText.value,
+                          extractedText,
                           style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w400,
@@ -215,8 +213,6 @@ class _BasicFirstState extends State<BasicFirst> {
               children: [
                 TextButton(
                   onPressed: () {
-                    _stopTts();
-                    commentController.resetComment();
                     Get.to(const BasicSecond());
                   },
                   child: Container(
@@ -242,9 +238,8 @@ class _BasicFirstState extends State<BasicFirst> {
                 ),
                 TextButton(
                   onPressed: () {
-                    _stopTts();
-                    commentController.resetComment();
                     Get.to(App());
+                    selectController.resetSelections();
                   },
                   child: Container(
                     width: 280,

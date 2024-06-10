@@ -5,6 +5,12 @@ class TextCommentController extends GetxController {
   var hasWarnings = false.obs;
   var warningMessages = <String>[].obs;
 
+  void resetComment() {
+    comment.value = '';
+    hasWarnings.value = false;
+    warningMessages.clear();
+  }
+
   void updateComment(String nutrient, String value, String unit) {
     double numericValue = double.tryParse(value) ?? 0;
 
