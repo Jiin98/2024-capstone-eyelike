@@ -14,7 +14,6 @@ class TextCommentController extends GetxController {
   void updateComment(String nutrient, String value, String unit) {
     double numericValue = double.tryParse(value) ?? 0;
 
-    // 단위를 통일하여 mg인 경우 g으로 환산
     if (unit == 'mg') {
       numericValue /= 1000;
       unit = 'g';

@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:eye_like/controllers/allergy_fifth_controller.dart';
-import 'package:eye_like/controllers/high_blood_pressure_controller.dart';
 import 'package:eye_like/controllers/image_controller.dart';
 import 'package:eye_like/controllers/select_controller_2.dart';
 import 'package:eye_like/controllers/text_recognition_controller.dart';
@@ -26,11 +25,10 @@ class _AllergyFifthState extends State<AllergyFifth> {
   final SelectController2 selectController = Get.put(SelectController2());
   ImageController controller = Get.put(ImageController());
   AllergyFifthController commentController = Get.put(AllergyFifthController());
-  String extractedText = '';
-  String highText = '';
   final TextRecognitionService _textRecognitionService =
       TextRecognitionService();
   FlutterTts flutterTts = FlutterTts();
+  String extractedText = '';
 
   @override
   void initState() {
@@ -38,27 +36,7 @@ class _AllergyFifthState extends State<AllergyFifth> {
     extractText();
   }
 
-  //   Future<void> extractText() async {  //전체 텍스트 추출 확인 코드
-  //   //텍스트 추출
-  //   ByteData data = await rootBundle.load('assets/images/food_label_7.jpeg');
-  //   Uint8List bytes = data.buffer.asUint8List();
-  //   Directory tempDir = await getTemporaryDirectory();
-  //   File imageFile =
-  //       await File('${tempDir.path}/food_label_7.jpeg').writeAsBytes(bytes);
-
-  //   try {
-  //     String text =
-  //         await _textRecognitionService.recognizeTextFromImage(imageFile);
-  //     setState(() {
-  //       extractedText = text;
-  //       _speak(extractedText);
-  //     });
-  //   } catch (e) {
-  //     print('Error: $e');
-  //   }
-  // }
   Future<void> extractText() async {
-    // 텍스트 추출
     ByteData data = await rootBundle.load('assets/images/food_label_7.jpeg');
     Uint8List bytes = data.buffer.asUint8List();
     Directory tempDir = await getTemporaryDirectory();
@@ -69,15 +47,12 @@ class _AllergyFifthState extends State<AllergyFifth> {
       String text =
           await _textRecognitionService.recognizeTextFromImage(imageFile);
 
-      // 정규표현식 패턴
       RegExp regExp = RegExp(
           r'(난류|우유|메밀|땅콩|대두|밀|고등어|게|새우|돼지고기|복숭아|토마토|아황산류|호두|닭고기|쇠고기|오징어|조개류|잣)');
-      // 매칭 결과
       Iterable<RegExpMatch> matches = regExp.allMatches(text);
 
       List<String> allergyInfoList = [];
 
-      // 후처리 및 모든 성분 정보 저장
       String regexExtractedText = matches.map((match) {
         String nutrient = match.group(1) ?? '';
 
@@ -86,13 +61,10 @@ class _AllergyFifthState extends State<AllergyFifth> {
         return nutrient;
       }).join('\n');
 
-      // 모든 성분 정보를 commentController에 넘겨줌
-      String combinedText = '';
       for (var nutrient in allergyInfoList) {
         commentController.updateComment(
           nutrient,
         );
-        combinedText += '$nutrient\n';
       }
 
       commentController.finalizeComment();
@@ -100,7 +72,6 @@ class _AllergyFifthState extends State<AllergyFifth> {
       setState(() {
         extractedText = regexExtractedText;
 
-        // 선택된 알레르기 성분과 매칭되는지 확인
         for (String allergy in widget.selectedAllergies) {
           if (extractedText.contains(allergy)) {
             commentController.updateComment(allergy);
@@ -118,13 +89,13 @@ class _AllergyFifthState extends State<AllergyFifth> {
 
   Future<void> _speak(String text) async {
     await flutterTts.setLanguage('ko-KR');
-    await flutterTts.setSpeechRate(0.3); // 속도 조절 (0.0 ~ 1.0)
+    await flutterTts.setSpeechRate(0.3);
 
     // 줄바꿈 문자를 인식하여 잠시 멈추기
     List<String> lines = text.split('\n');
     for (String line in lines) {
       await flutterTts.speak(line);
-      await Future.delayed(const Duration(seconds: 1)); // 줄마다 1초 멈춤
+      await Future.delayed(const Duration(seconds: 1));
     }
   }
 
@@ -138,9 +109,9 @@ class _AllergyFifthState extends State<AllergyFifth> {
     if (type == 'positive') {
       dialogColor = Colors.green;
     } else if (type == 'negative') {
-      dialogColor = Color(0xffFF0000);
+      dialogColor = const Color(0xffFF0000);
     } else {
-      dialogColor = Color(0xff001AFF);
+      dialogColor = const Color(0xff001AFF);
     }
 
     showDialog(
@@ -151,21 +122,16 @@ class _AllergyFifthState extends State<AllergyFifth> {
             side: BorderSide(color: dialogColor, width: 2),
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Container(
+          child: SizedBox(
             height: 300,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: dialogColor, width: 2), // 테두리 설정
-            ),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     color: dialogColor,
                     borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(10)),
+                        const BorderRadius.vertical(top: Radius.circular(10)),
                   ),
                   child: Stack(
                     children: [
@@ -196,7 +162,7 @@ class _AllergyFifthState extends State<AllergyFifth> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(20),
                   child: Text(
                     commentController.comment.value,
                     style: const TextStyle(
@@ -255,7 +221,7 @@ class _AllergyFifthState extends State<AllergyFifth> {
                           ),
                         ),
                       ],
-                    ), // 전체 텍스트 추출 확인 코드
+                    ),
                   ),
                   // Obx(
                   //   () => controller.imageFile.value != null //카메라 이미지 업데이트 되는지 확인 필요

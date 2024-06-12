@@ -21,11 +21,10 @@ class BasicFirst extends StatefulWidget {
 class _BasicFirstState extends State<BasicFirst> {
   ImageController controller = Get.put(ImageController());
   TextCommentController commentController = Get.put(TextCommentController());
-  var extractedText = ''.obs;
-  String highText = '';
   final TextRecognitionService _textRecognitionService =
       TextRecognitionService();
   FlutterTts flutterTts = FlutterTts();
+  var extractedText = ''.obs;
 
   @override
   void initState() {
@@ -33,27 +32,7 @@ class _BasicFirstState extends State<BasicFirst> {
     extractText();
   }
 
-  //   Future<void> extractText() async {  //전체 텍스트 추출 확인 코드
-  //   //텍스트 추출
-  //   ByteData data = await rootBundle.load('assets/images/food_label_7.jpeg');
-  //   Uint8List bytes = data.buffer.asUint8List();
-  //   Directory tempDir = await getTemporaryDirectory();
-  //   File imageFile =
-  //       await File('${tempDir.path}/food_label_7.jpeg').writeAsBytes(bytes);
-
-  //   try {
-  //     String text =
-  //         await _textRecognitionService.recognizeTextFromImage(imageFile);
-  //     setState(() {
-  //       extractedText = text;
-  //       _speak(extractedText);
-  //     });
-  //   } catch (e) {
-  //     print('Error: $e');
-  //   }
-  // }
   Future<void> extractText() async {
-    // 텍스트 추출
     ByteData data = await rootBundle.load('assets/images/food_label_7.jpeg');
     Uint8List bytes = data.buffer.asUint8List();
     Directory tempDir = await getTemporaryDirectory();
@@ -64,65 +43,56 @@ class _BasicFirstState extends State<BasicFirst> {
       String text =
           await _textRecognitionService.recognizeTextFromImage(imageFile);
 
-      // 정규표현식 패턴
       RegExp regExp = RegExp(
           r'(트랜스지방|포화지방|지방|당류|나트륨|탄수화물|단백질|콜레스테롤)\s*([\d,.]+)\s*(mg|g)?');
-      // 매칭 결과
+
       Iterable<RegExpMatch> matches = regExp.allMatches(text);
 
       List<Map<String, String>> nutrientInfoList = [];
 
-      // 후처리 및 모든 성분 정보 저장
       String regexExtractedText = matches.map((match) {
         String nutrient = match.group(1) ?? '';
         String value = match.group(2) ?? '';
         String unit = match.group(3) ?? '';
 
-        // 숫자 뒤의 불필요한 문자를 제거
         value =
             value.replaceAll(RegExp(r'\D$'), ''); // 숫자 뒤에 오는 텍스트가 g이 아닌 9이면 제거
+
+        if (unit.isEmpty) {
+          unit = 'g'; // g로 변환
+        }
 
         double numericValue =
             double.tryParse(value) ?? 0; // 소수 존재하기 때문에 double 변수 사용
 
-        // 단위를 통일하여 mg인 경우 g으로 환산
         if (unit == 'mg') {
           numericValue /= 1000;
           value = numericValue.toString();
-          unit = 'g';
+          unit = 'g'; // mg -> g 환산
         }
 
-        // 각 성분의 정보를 리스트에 저장
         nutrientInfoList.add({
           'nutrient': nutrient,
           'value': value,
           'unit': unit,
         });
 
-        if (unit.isEmpty) {
-          unit = 'g'; // 9 대신 g으로 변경
-        }
-
         return '$nutrient $value $unit';
       }).join('\n');
 
-      // 모든 성분 정보를 commentController에 넘겨줌
-      String combinedText = '';
       for (var nutrientInfo in nutrientInfoList) {
         commentController.updateComment(
           nutrientInfo['nutrient'] ?? '',
           nutrientInfo['value'] ?? '',
           nutrientInfo['unit'] ?? '',
         );
-        combinedText +=
-            '${nutrientInfo['nutrient']} ${nutrientInfo['value']} ${nutrientInfo['unit']}\n';
       }
 
       commentController.finalizeComment();
 
       setState(() {
+        print(text); //전체 텍스트 확인 코드
         extractedText.value = regexExtractedText;
-        // _speak(combinedText); // 전체 텍스트 확인 코드
         _speak(commentController.comment.value);
       });
     } catch (e) {
@@ -132,13 +102,12 @@ class _BasicFirstState extends State<BasicFirst> {
 
   Future<void> _speak(String text) async {
     await flutterTts.setLanguage('ko-KR');
-    await flutterTts.setSpeechRate(0.3); // 속도 조절 (0.0 ~ 1.0)
+    await flutterTts.setSpeechRate(0.3);
 
-    // 줄바꿈 문자를 인식하여 잠시 멈추기
     List<String> lines = text.split('\n');
     for (String line in lines) {
       await flutterTts.speak(line);
-      await Future.delayed(const Duration(seconds: 1)); // 줄마다 1초 멈춤
+      await Future.delayed(const Duration(seconds: 1));
     }
   }
 
@@ -187,7 +156,7 @@ class _BasicFirstState extends State<BasicFirst> {
                           ),
                         ),
                       ],
-                    ), // 전체 텍스트 추출 확인 코드
+                    ),
                   ),
                   // Obx(
                   //   () => controller.imageFile.value != null //카메라 이미지 업데이트 되는지 확인 필요
