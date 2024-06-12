@@ -48,8 +48,13 @@ class App extends StatelessWidget {
               //   await controller.openCamera();
               //   Get.to(BasicFirst());
               // },
-              onPressed: () {
-                Get.to(const BasicFirst());
+              onPressed: () async {
+                await controller.openCamera();
+                if (controller.imageFile.value != null) {
+                  File imageFile = File(controller
+                      .imageFile.value!.path); // Convert XFile to File
+                  Get.to(() => BasicFirst(cameraFile: imageFile));
+                }
               },
             ),
             const SizedBox(

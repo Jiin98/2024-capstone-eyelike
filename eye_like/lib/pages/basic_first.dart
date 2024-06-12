@@ -12,7 +12,9 @@ import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 
 class BasicFirst extends StatefulWidget {
-  const BasicFirst({super.key});
+  final File? cameraFile;
+
+  const BasicFirst({super.key, this.cameraFile});
 
   @override
   State<BasicFirst> createState() => _BasicFirstState();
@@ -33,15 +35,15 @@ class _BasicFirstState extends State<BasicFirst> {
   }
 
   Future<void> extractText() async {
-    ByteData data = await rootBundle.load('assets/images/food_label_7.jpeg');
-    Uint8List bytes = data.buffer.asUint8List();
-    Directory tempDir = await getTemporaryDirectory();
-    File imageFile =
-        await File('${tempDir.path}/food_label_7.jpeg').writeAsBytes(bytes);
+    // ByteData data = await rootBundle.load('assets/images/food_label_7.jpeg'); // 이미지 테스트 코드
+    // Uint8List bytes = data.buffer.asUint8List();
+    // Directory tempDir = await getTemporaryDirectory();
+    // File imageFile =
+    //     await File('${tempDir.path}/food_label_7.jpeg').writeAsBytes(bytes);
 
     try {
       String text =
-          await _textRecognitionService.recognizeTextFromImage(imageFile);
+          await _textRecognitionService.recognizeTextFromImage(widget.cameraFile!);
 
       RegExp regExp = RegExp(
           r'(트랜스지방|포화지방|지방|당류|나트륨|탄수화물|단백질|콜레스테롤)\s*([\d,.]+)\s*(mg|g)?');
