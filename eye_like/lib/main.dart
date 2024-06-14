@@ -2,8 +2,6 @@ import 'package:eye_like/pages/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
-
 void main() {
   runApp(const MyApp());
 }
@@ -16,6 +14,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white,
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.white,
         ),

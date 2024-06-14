@@ -1,14 +1,35 @@
+import 'package:eye_like/controllers/setting_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 enum SelectButtonType { type1, type2, type3 }
 
 class SelectButtonWidget extends StatelessWidget {
+  final SettingsController settingsController = Get.put(SettingsController());
+
   // StatelessWidget은 불변성을 지닌 클래스이므로, StatelessWidget의 모든 인스턴스는 final 선언
   final VoidCallback? onPressed;
   final String? name; // ?는 null값을 가질 수 있음을 의미
   final SelectButtonType type;
 
-  const SelectButtonWidget({
+  Color _getColor(SelectButtonType type) {
+    switch (type) {
+      case SelectButtonType.type1:
+        return settingsController.highContrastMode.value
+            ? const Color(0xffFFFF00)
+            : const Color(0xffD9C55F);
+      case SelectButtonType.type2:
+        return settingsController.highContrastMode.value
+            ? const Color(0xFFFF0000)
+            : const Color(0xffF27979);
+      case SelectButtonType.type3:
+        return Colors.transparent;
+      default:
+        return Colors.transparent;
+    }
+  }
+
+   SelectButtonWidget({
     Key? key,
     this.onPressed,
     this.name,
@@ -26,7 +47,7 @@ class SelectButtonWidget extends StatelessWidget {
         width: 110,
         height: 110,
         decoration: BoxDecoration(
-          color: const Color(0xffD9C55F),
+          color: _getColor(SelectButtonType.type1),
           borderRadius: BorderRadius.circular(15),
         ),
         child: Center(
@@ -54,7 +75,7 @@ class SelectButtonWidget extends StatelessWidget {
         width: 110,
         height: 110,
         decoration: BoxDecoration(
-          color: const Color(0xffF27979),
+          color: _getColor(SelectButtonType.type2),
           borderRadius: BorderRadius.circular(15),
         ),
         child: Center(
@@ -82,7 +103,7 @@ class SelectButtonWidget extends StatelessWidget {
         width: 110,
         height: 110,
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0),
+          color: _getColor(SelectButtonType.type3),
           borderRadius: BorderRadius.circular(15),
         ),
         child: Center(

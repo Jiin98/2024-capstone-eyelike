@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:eye_like/controllers/image_controller.dart';
+import 'package:eye_like/controllers/setting_controller.dart';
 import 'package:eye_like/controllers/text_comment_controller.dart';
 import 'package:eye_like/controllers/text_recognition_controller.dart';
 import 'package:eye_like/pages/app.dart';
@@ -21,12 +22,14 @@ class BasicFirst extends StatefulWidget {
 }
 
 class _BasicFirstState extends State<BasicFirst> {
+  final SettingsController settingsController = Get.put(SettingsController());
   ImageController controller = Get.put(ImageController());
   TextCommentController commentController = Get.put(TextCommentController());
   final TextRecognitionService _textRecognitionService =
       TextRecognitionService();
   FlutterTts flutterTts = FlutterTts();
   var extractedText = ''.obs;
+  var fullText = ''.obs;
 
   @override
   void initState() {
@@ -35,15 +38,18 @@ class _BasicFirstState extends State<BasicFirst> {
   }
 
   Future<void> extractText() async {
-    // ByteData data = await rootBundle.load('assets/images/food_label_7.jpeg'); // 이미지 테스트 코드
-    // Uint8List bytes = data.buffer.asUint8List();
-    // Directory tempDir = await getTemporaryDirectory();
-    // File imageFile =
-    //     await File('${tempDir.path}/food_label_7.jpeg').writeAsBytes(bytes);
+    ByteData data =
+        await rootBundle.load('assets/images/food_label_7.jpeg'); // 이미지 테스트 코드
+    Uint8List bytes = data.buffer.asUint8List();
+    Directory tempDir = await getTemporaryDirectory();
+    File imageFile =
+        await File('${tempDir.path}/food_label_7.jpeg').writeAsBytes(bytes);
 
     try {
+      // String text =
+      //     await _textRecognitionService.recognizeTextFromImage(widget.cameraFile!);
       String text =
-          await _textRecognitionService.recognizeTextFromImage(widget.cameraFile!);
+          await _textRecognitionService.recognizeTextFromImage(imageFile);
 
       RegExp regExp = RegExp(
           r'(트랜스지방|포화지방|지방|당류|나트륨|탄수화물|단백질|콜레스테롤)\s*([\d,.]+)\s*(mg|g)?');
@@ -93,6 +99,7 @@ class _BasicFirstState extends State<BasicFirst> {
       commentController.finalizeComment();
 
       setState(() {
+        fullText.value = text;
         print(text); //전체 텍스트 확인 코드
         extractedText.value = regexExtractedText;
         _speak(commentController.comment.value);
@@ -120,124 +127,129 @@ class _BasicFirstState extends State<BasicFirst> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 300,
-              height: 450,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black, width: 1.5),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 250,
-                    height: 250,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          '영양성분',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          extractedText.value,
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  // Obx(
-                  //   () => controller.imageFile.value != null //카메라 이미지 업데이트 되는지 확인 필요
-                  //       ? Image.file(
-                  //           File(controller.imageFile.value!.path),
-                  //           width: 250,
-                  //           height: 250,
-                  //         )
-                  //       : Container(
-                  //           width: 250,
-                  //           height: 250,
-                  //           color: Colors.grey,
-                  //         ),
-                  // ),
-                  // const SizedBox(
-                  //   height: 40,
-                  // ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 50,
-            ),
-            Column(
+      body: Obx(
+        () => Container(
+          color: settingsController.highContrastMode.value
+              ? Colors.black
+              : Colors.white,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TextButton(
-                  onPressed: () {
-                    _stopTts();
-                    commentController.resetComment();
-                    Get.to(const BasicSecond());
-                  },
-                  child: Container(
-                    width: 280,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: const Color(0xff30D979),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Center(
-                        child: Text(
-                      '모든정보듣기',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
+                Container(
+                  width: 300,
+                  height: 450,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                        color: settingsController.highContrastMode.value
+                            ? Colors.white
+                            : Colors.black,
+                        width: 1.5),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 250,
+                        height: 250,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '영양성분',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.w600,
+                                color: settingsController.highContrastMode.value
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                              extractedText.value,
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w400,
+                                color: settingsController.highContrastMode.value
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    )),
+                    ],
                   ),
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 50,
                 ),
-                TextButton(
-                  onPressed: () {
-                    _stopTts();
-                    commentController.resetComment();
-                    Get.to(App());
-                  },
-                  child: Container(
-                    width: 280,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: const Color(0xff30D979),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Center(
-                        child: Text(
-                      '종료',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
+                Column(
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        _stopTts();
+                        commentController.resetComment();
+                        Get.to(const BasicSecond());
+                      },
+                      child: Container(
+                        width: 280,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: settingsController.highContrastMode.value
+                              ? const Color(0xff00FF00)
+                              : const Color(0xff30D979),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Center(
+                            child: Text(
+                          '모든정보듣기',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
+                          ),
+                        )),
                       ),
-                    )),
-                  ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        _stopTts();
+                        commentController.resetComment();
+                        Get.to(App());
+                      },
+                      child: Container(
+                        width: 280,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: settingsController.highContrastMode.value
+                              ? const Color(0xff00FF00)
+                              : const Color(0xff30D979),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Center(
+                            child: Text(
+                          '종료',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
+                          ),
+                        )),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );

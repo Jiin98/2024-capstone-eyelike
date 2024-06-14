@@ -7,12 +7,14 @@ class ModeButtonWidget extends StatelessWidget {
   final VoidCallback? onPressed;
   final String mode; // ?는 null값을 가질 수 있음을 의미
   final ModeButtonType type;
+    final Color color;
 
   const ModeButtonWidget({
     Key? key,
     this.onPressed,
     required this.mode,
     required this.type,
+    required this.color,
   }) : super(key: key);
 
   Widget type1widget() {
@@ -26,7 +28,7 @@ class ModeButtonWidget extends StatelessWidget {
         width: 280,
         height: 50,
         decoration: BoxDecoration(
-          color: const Color(0xffD9C55F),
+          color: color,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Center(
@@ -54,7 +56,7 @@ class ModeButtonWidget extends StatelessWidget {
         width: 280,
         height: 50,
         decoration: BoxDecoration(
-          color: const Color(0xffF27979),
+          color: color,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Center(

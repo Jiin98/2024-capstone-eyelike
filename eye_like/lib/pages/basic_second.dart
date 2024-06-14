@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:eye_like/controllers/image_controller.dart';
+import 'package:eye_like/controllers/setting_controller.dart';
 import 'package:eye_like/controllers/text_comment_controller.dart';
 import 'package:eye_like/controllers/text_recognition_controller.dart';
 import 'package:eye_like/pages/app.dart';
@@ -19,6 +20,7 @@ class BasicSecond extends StatefulWidget {
 
 class _BasicSecondState extends State<BasicSecond> {
   ImageController controller = Get.put(ImageController());
+  final SettingsController settingsController = Get.put(SettingsController());
   TextCommentController commentController = Get.put(TextCommentController());
   final TextRecognitionService _textRecognitionService =
       TextRecognitionService();
@@ -79,20 +81,11 @@ class _BasicSecondState extends State<BasicSecond> {
         return '$nutrient $value $unit';
       }).join('\n');
 
-      String combinedText = '';
-      for (var nutrientInfo in nutrientInfoList) {
-        commentController.updateComment(
-          nutrientInfo['nutrient'] ?? '',
-          nutrientInfo['value'] ?? '',
-          nutrientInfo['unit'] ?? '',
-        );
-        combinedText +=
-            '${nutrientInfo['nutrient']} ${nutrientInfo['value']} ${nutrientInfo['unit']}\n';
-      }
+
 
       setState(() {
         extractedText.value = regexExtractedText;
-        _speak(combinedText.trim());
+        _speak(extractedText.value);
       });
     } catch (e) {
       print('Error: $e');
@@ -129,76 +122,95 @@ class _BasicSecondState extends State<BasicSecond> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 300,
-              height: 450,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black, width: 1.5),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 250,
-                    height: 250,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          '영양성분',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          extractedText.value,
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ],
-                    ),
+      body: Obx(
+        () => Container(
+          color: settingsController.highContrastMode.value
+              ? Colors.black
+              : Colors.white,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 300,
+                  height: 450,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                        color: settingsController.highContrastMode.value
+                            ? Colors.white
+                            : Colors.black,
+                        width: 1.5),
+                    borderRadius: BorderRadius.circular(20),
                   ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 50,
-            ),
-            TextButton(
-              onPressed: () async {
-                await _stopTts();
-                Get.to(App());
-              },
-              child: Container(
-                width: 280,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: const Color(0xff30D979),
-                  borderRadius: BorderRadius.circular(10),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 250,
+                        height: 250,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '영양성분',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.w600,
+                                color: settingsController.highContrastMode.value
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                              extractedText.value,
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w400,
+                                color: settingsController.highContrastMode.value
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                child: const Center(
-                    child: Text(
-                  '종료',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
+                const SizedBox(
+                  height: 50,
+                ),
+                TextButton(
+                  onPressed: () async {
+                    await _stopTts();
+                    Get.to(App());
+                  },
+                  child: Container(
+                    width: 280,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: settingsController.highContrastMode.value
+                          ? const Color(0xff00FF00)
+                          : const Color(0xff30D979),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Center(
+                        child: Text(
+                      '종료',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                      ),
+                    )),
                   ),
-                )),
-              ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

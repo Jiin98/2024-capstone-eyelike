@@ -1,11 +1,10 @@
 import 'dart:io';
 
 import 'package:eye_like/controllers/image_controller.dart';
-import 'package:eye_like/controllers/diabetes_controller.dart';
+import 'package:eye_like/controllers/high_blood_pressure_controller.dart';
 import 'package:eye_like/controllers/select_controller_1.dart';
 import 'package:eye_like/controllers/setting_controller.dart';
 import 'package:eye_like/controllers/text_recognition_controller.dart';
-import 'package:eye_like/pages/Diabetes_second.dart';
 import 'package:eye_like/pages/app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,22 +12,23 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 
-class Diabetes extends StatefulWidget {
-  const Diabetes({super.key});
+class HighBloodPressureSecond extends StatefulWidget {
+  const HighBloodPressureSecond({super.key});
 
   @override
-  State<Diabetes> createState() => _DiabetesState();
+  State<HighBloodPressureSecond> createState() => _HighBloodPressureSecondState();
 }
 
-class _DiabetesState extends State<Diabetes> {
+class _HighBloodPressureSecondState extends State<HighBloodPressureSecond> {
   final SettingsController settingsController = Get.put(SettingsController());
   final SelectController1 selectController = Get.put(SelectController1());
   ImageController controller = Get.put(ImageController());
-  DiabetesController commentController = Get.put(DiabetesController());
+  HighBloodPressureController commentController = Get.put(HighBloodPressureController());
   final TextRecognitionService _textRecognitionService =
       TextRecognitionService();
   FlutterTts flutterTts = FlutterTts();
-  String extractedText = '';
+  var extractedText = ''.obs;
+  final _isSpeaking = false.obs;
 
   @override
   void initState() {
@@ -94,10 +94,8 @@ class _DiabetesState extends State<Diabetes> {
       commentController.finalizeComment();
 
       setState(() {
-        extractedText = regexExtractedText;
-        _speak(commentController.comment.value);
-        _showMessageDialog(commentController.mostExtremeMessage.value,
-            commentController.mostExtremeMessageType.value);
+        extractedText.value = regexExtractedText;
+        _speak(extractedText.value);
       });
     } catch (e) {
       print('Error: $e');
@@ -108,102 +106,27 @@ class _DiabetesState extends State<Diabetes> {
     await flutterTts.setLanguage('ko-KR');
     await flutterTts.setSpeechRate(0.3);
 
+    setState(() {
+      _isSpeaking.value = true;
+    });
+
     List<String> lines = text.split('\n');
     for (String line in lines) {
+      if (!_isSpeaking.value) break;
       await flutterTts.speak(line);
       await Future.delayed(const Duration(seconds: 1));
     }
+
+    setState(() {
+      _isSpeaking.value = false;
+    });
   }
 
   Future<void> _stopTts() async {
+    setState(() {
+      _isSpeaking.value = false;
+    });
     await flutterTts.stop();
-  }
-
-  void _showMessageDialog(String message, String type) {
-    Color dialogColor;
-
-    if (type == 'positive') {
-      dialogColor = const Color(0xff001AFF);
-    } else if (type == 'negative') {
-      dialogColor = const Color(0xffFF0000);
-    } else {
-      dialogColor = Colors.green;
-    }
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Obx(
-          () => Dialog(
-            shape: RoundedRectangleBorder(
-              side: BorderSide(color: dialogColor, width: 2),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Container(
-              height: 300,
-              decoration: BoxDecoration(
-                color: settingsController.highContrastMode.value
-                    ? Colors.black
-                    : Colors.white,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: dialogColor,
-                      borderRadius:
-                          const BorderRadius.vertical(top: Radius.circular(10)),
-                    ),
-                    child: Stack(
-                      children: [
-                        const Center(
-                          child: Text(
-                            '알림',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          right: 0,
-                          child: GestureDetector(
-                            onTap: () {
-                              _stopTts();
-                              Get.back();
-                            },
-                            child: const Icon(
-                              Icons.close,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Text(
-                      message,
-                      style: TextStyle(
-                        color: settingsController.highContrastMode.value
-                            ? Colors.white
-                            : Colors.black,
-                        fontSize: 23,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
   }
 
   @override
@@ -252,7 +175,7 @@ class _DiabetesState extends State<Diabetes> {
                               height: 20,
                             ),
                             Text(
-                              extractedText,
+                              extractedText.value,
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w400,
@@ -286,65 +209,32 @@ class _DiabetesState extends State<Diabetes> {
                 const SizedBox(
                   height: 50,
                 ),
-                Column(
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        _stopTts();
-                        commentController.resetComment();
-                        Get.to(const DiabetesSecond());
-                      },
-                      child: Container(
-                        width: 280,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: settingsController.highContrastMode.value
-                              ? const Color(0xff00FF00)
-                              : const Color(0xff30D979),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Center(
-                            child: Text(
-                          '모든정보듣기',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24,
-                          ),
-                        )),
+                TextButton(
+                  onPressed: () {
+                    _stopTts();
+                    Get.to(App());
+                    selectController.resetSelections();
+                    commentController.resetComment();
+                  },
+                  child: Container(
+                    width: 280,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: settingsController.highContrastMode.value
+                          ? const Color(0xff00FF00)
+                          : const Color(0xff30D979),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Center(
+                        child: Text(
+                      '종료',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
                       ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        _stopTts();
-                        Get.to(App());
-                        selectController.resetSelections();
-                        commentController.resetComment();
-                      },
-                      child: Container(
-                        width: 280,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: settingsController.highContrastMode.value
-                              ? const Color(0xff00FF00)
-                              : const Color(0xff30D979),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Center(
-                            child: Text(
-                          '종료',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24,
-                          ),
-                        )),
-                      ),
-                    ),
-                  ],
+                    )),
+                  ),
                 ),
               ],
             ),

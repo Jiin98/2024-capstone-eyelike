@@ -26,6 +26,7 @@ class AllergyFifthController extends GetxController {
       comment.value = mostExtremeMessage.value;
     } else {
       comment.value = '해당 제품은 알레르기 성분이 없습니다.';
+      mostExtremeMessageType.value = 'positive';
     }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:eye_like/controllers/select_controller_1.dart';
 import 'package:eye_like/components/select_button_widget.dart';
+import 'package:eye_like/controllers/setting_controller.dart';
 import 'package:eye_like/pages/diabetes_first.dart';
 import 'package:eye_like/pages/high_blood_pressure_first.dart';
 import 'package:eye_like/pages/obesity_first.dart';
@@ -9,6 +10,7 @@ import 'package:get/get.dart';
 class DiseaseFirst extends StatelessWidget {
   DiseaseFirst({super.key});
   final SelectController1 selectController = Get.put(SelectController1());
+  final SettingsController settingsController = Get.put(SettingsController());
 
   Widget _selectToggleButton(String name) {
     return Obx(() => SelectButtonWidget(
@@ -33,7 +35,9 @@ class DiseaseFirst extends StatelessWidget {
         width: 110,
         height: 60,
         decoration: BoxDecoration(
-          color: const Color(0xff30D979),
+          color: settingsController.highContrastMode.value
+              ? const Color(0xff00FF00)
+              : const Color(0xff30D979),
           borderRadius: BorderRadius.circular(15),
         ),
         child: const Center(
@@ -71,7 +75,9 @@ class DiseaseFirst extends StatelessWidget {
         width: 110,
         height: 60,
         decoration: BoxDecoration(
-          color: const Color(0xff30D979),
+          color: settingsController.highContrastMode.value
+              ? const Color(0xff00FF00)
+              : const Color(0xff30D979),
           borderRadius: BorderRadius.circular(15),
         ),
         child: const Center(
@@ -91,50 +97,59 @@ class DiseaseFirst extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: 120,
-            child: Image.asset('assets/images/main_logo.png'),
-          ),
-          const SizedBox(
-            height: 40,
-          ),
-          Row(
+      body: Obx(
+        () => Container(
+          color: settingsController.highContrastMode.value
+              ? Colors.black
+              : Colors.white,
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _selectToggleButton('당뇨병'),
-              const SizedBox(
-                width: 30,
+              SizedBox(
+                height: 120,
+                child: Image.asset('assets/images/main_logo.png'),
               ),
-              _selectToggleButton('고혈압'),
+              const SizedBox(
+                height: 40,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _selectToggleButton('당뇨병'),
+                  const SizedBox(
+                    width: 30,
+                  ),
+                  _selectToggleButton('고혈압'),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _selectToggleButton('비만'),
+                  const SizedBox(
+                    width: 30,
+                  ),
+                  SelectButtonWidget(
+                    type: SelectButtonType.type3,
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 40,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _previousButton(),
+                  const SizedBox(
+                    width: 30,
+                  ),
+                  _nextButton(),
+                ],
+              ),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _selectToggleButton('비만'),
-              const SizedBox(
-                width: 30,
-              ),
-              const SelectButtonWidget(type: SelectButtonType.type3),
-            ],
-          ),
-          const SizedBox(
-            height: 40,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _previousButton(),
-              const SizedBox(
-                width: 30,
-              ),
-              _nextButton(),
-            ],
-          ),
-        ],
+        ),
       ),
     );
   }

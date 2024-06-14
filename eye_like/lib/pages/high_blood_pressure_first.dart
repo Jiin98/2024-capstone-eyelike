@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:eye_like/controllers/high_blood_pressure_controller.dart';
 import 'package:eye_like/controllers/image_controller.dart';
 import 'package:eye_like/controllers/select_controller_1.dart';
+import 'package:eye_like/controllers/setting_controller.dart';
 import 'package:eye_like/controllers/text_recognition_controller.dart';
 import 'package:eye_like/pages/app.dart';
+import 'package:eye_like/pages/high_blood_pressure_second.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_tts/flutter_tts.dart';
@@ -19,9 +21,11 @@ class HighBloodPressure extends StatefulWidget {
 }
 
 class _HighBloodPressureState extends State<HighBloodPressure> {
+  final SettingsController settingsController = Get.put(SettingsController());
   final SelectController1 selectController = Get.put(SelectController1());
   ImageController controller = Get.put(ImageController());
-  HighBloodPressureController commentController = Get.put(HighBloodPressureController());
+  HighBloodPressureController commentController =
+      Get.put(HighBloodPressureController());
   final TextRecognitionService _textRecognitionService =
       TextRecognitionService();
   FlutterTts flutterTts = FlutterTts();
@@ -103,7 +107,7 @@ class _HighBloodPressureState extends State<HighBloodPressure> {
 
   Future<void> _speak(String text) async {
     await flutterTts.setLanguage('ko-KR');
-    await flutterTts.setSpeechRate(0.3); 
+    await flutterTts.setSpeechRate(0.3);
 
     List<String> lines = text.split('\n');
     for (String line in lines) {
@@ -130,64 +134,72 @@ class _HighBloodPressureState extends State<HighBloodPressure> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            side: BorderSide(color: dialogColor, width: 2),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Container(
-            height: 300,
-            decoration: const BoxDecoration(
+        return Obx(
+          () => Dialog(
+            shape: RoundedRectangleBorder(
+              side: BorderSide(color: dialogColor, width: 2),
+              borderRadius: BorderRadius.circular(10),
             ),
-            child: Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: dialogColor,
-                    borderRadius:
-                        const BorderRadius.vertical(top: Radius.circular(10)),
-                  ),
-                  child: Stack(
-                    children: [
-                      const Center(
-                        child: Text(
-                          '알림',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
+            child: Container(
+              height: 300,
+              decoration: BoxDecoration(
+                color: settingsController.highContrastMode.value
+                    ? Colors.black
+                    : Colors.white,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: dialogColor,
+                      borderRadius:
+                          const BorderRadius.vertical(top: Radius.circular(10)),
+                    ),
+                    child: Stack(
+                      children: [
+                        const Center(
+                          child: Text(
+                            '알림',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                      ),
-                      Positioned(
-                        right: 0,
-                        child: GestureDetector(
-                          onTap: () {
-                            _stopTts();
-                            Get.back();
-                          },
-                          child: const Icon(
-                            Icons.close,
-                            color: Colors.white,
+                        Positioned(
+                          right: 0,
+                          child: GestureDetector(
+                            onTap: () {
+                              _stopTts();
+                              Get.back();
+                            },
+                            child: const Icon(
+                              Icons.close,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Text(
-                    message,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 23,
-                      fontWeight: FontWeight.w700,
+                      ],
                     ),
                   ),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Text(
+                      message,
+                      style: TextStyle(
+                        color: settingsController.highContrastMode.value
+                            ? Colors.white
+                            : Colors.black,
+                        fontSize: 23,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );
@@ -198,124 +210,146 @@ class _HighBloodPressureState extends State<HighBloodPressure> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 300,
-              height: 450,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black, width: 1.5),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 250,
-                    height: 250,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          '영양성분',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          extractedText,
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  // Obx(
-                  //   () => controller.imageFile.value != null //카메라 이미지 업데이트 되는지 확인 필요
-                  //       ? Image.file(
-                  //           File(controller.imageFile.value!.path),
-                  //           width: 250,
-                  //           height: 250,
-                  //         )
-                  //       : Container(
-                  //           width: 250,
-                  //           height: 250,
-                  //           color: Colors.grey,
-                  //         ),
-                  // ),
-                  // const SizedBox(
-                  //   height: 40,
-                  // ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 50,
-            ),
-            Column(
+      body: Obx(
+        () => Container(
+          color: settingsController.highContrastMode.value
+              ? Colors.black
+              : Colors.white,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TextButton(
-                  onPressed: () {
-                    _stopTts();
-                    commentController.resetComment();
-                  },
-                  child: Container(
-                    width: 280,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: const Color(0xff30D979),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Center(
-                        child: Text(
-                      '모든정보듣기',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
+                Container(
+                  width: 300,
+                  height: 450,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                        color: settingsController.highContrastMode.value
+                            ? Colors.white
+                            : Colors.black,
+                        width: 1.5),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 250,
+                        height: 250,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '영양성분',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.w600,
+                                color: settingsController.highContrastMode.value
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                              extractedText,
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w400,
+                                color: settingsController.highContrastMode.value
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    )),
+                      // Obx(
+                      //   () => controller.imageFile.value != null //카메라 이미지 업데이트 되는지 확인 필요
+                      //       ? Image.file(
+                      //           File(controller.imageFile.value!.path),
+                      //           width: 250,
+                      //           height: 250,
+                      //         )
+                      //       : Container(
+                      //           width: 250,
+                      //           height: 250,
+                      //           color: Colors.grey,
+                      //         ),
+                      // ),
+                      // const SizedBox(
+                      //   height: 40,
+                      // ),
+                    ],
                   ),
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 50,
                 ),
-                TextButton(
-                  onPressed: () {
-                    _stopTts();
-                    Get.to(App());
-                    selectController.resetSelections();
-                    commentController.resetComment();
-                  },
-                  child: Container(
-                    width: 280,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: const Color(0xff30D979),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Center(
-                        child: Text(
-                      '종료',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
+                Column(
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        _stopTts();
+                        commentController.resetComment();
+                        Get.to(const HighBloodPressureSecond());
+                      },
+                      child: Container(
+                        width: 280,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: settingsController.highContrastMode.value
+                              ? const Color(0xff00FF00)
+                              : const Color(0xff30D979),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Center(
+                            child: Text(
+                          '모든정보듣기',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
+                          ),
+                        )),
                       ),
-                    )),
-                  ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        _stopTts();
+                        Get.to(App());
+                        selectController.resetSelections();
+                        commentController.resetComment();
+                      },
+                      child: Container(
+                        width: 280,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: settingsController.highContrastMode.value
+                              ? const Color(0xff00FF00)
+                              : const Color(0xff30D979),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Center(
+                            child: Text(
+                          '종료',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
+                          ),
+                        )),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );

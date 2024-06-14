@@ -42,23 +42,65 @@ Widget _background() {
         const SizedBox(
           height: 24,
         ),
-        const ModeButtonWidget(
-          mode: '기본모드',
-          type: ModeButtonType.type1,
+        Container(
+          width: 280,
+          height: 50,
+          decoration: BoxDecoration(
+            color: const Color(0xffD9C55F),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: const Center(
+            child: Text(
+              '기본모드',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+              ),
+            ),
+          ),
         ),
         const SizedBox(
           height: 16,
         ),
-        const ModeButtonWidget(
-          mode: '질병모드',
-          type: ModeButtonType.type2,
+        Container(
+          width: 280,
+          height: 50,
+          decoration: BoxDecoration(
+            color: const Color(0xffF27979),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: const Center(
+            child: Text(
+              '질병모드',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+              ),
+            ),
+          ),
         ),
         const SizedBox(
           height: 16,
         ),
-        const ModeButtonWidget(
-          mode: '알레르기모드',
-          type: ModeButtonType.type2,
+        Container(
+          width: 280,
+          height: 50,
+          decoration: BoxDecoration(
+            color: const Color(0xffF27979),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: const Center(
+            child: Text(
+              '알레르기모드',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+              ),
+            ),
+          ),
         ),
       ],
     ),
