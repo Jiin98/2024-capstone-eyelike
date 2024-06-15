@@ -87,6 +87,10 @@ class _AllergyFifthState extends State<AllergyFifth> {
         value =
             value.replaceAll(RegExp(r'\D$'), ''); // 숫자 뒤에 오는 텍스트가 g이 아닌 경우 제거
 
+        if (value.startsWith('0') && !value.startsWith('0.')) {
+          value = value.substring(0, 1) + '.' + value.substring(1);
+        }
+
         if (unit.isEmpty) {
           unit = 'g'; // 9 대신 g으로 변경
         }
@@ -134,7 +138,7 @@ class _AllergyFifthState extends State<AllergyFifth> {
     await flutterTts.setLanguage('ko-KR');
     await flutterTts.setSpeechRate(0.3);
 
-     text = text.replaceAll(' g', ' gram');
+    text = text.replaceAll(' g', ' gram');
 
     // 줄바꿈 문자를 인식하여 잠시 멈추기
     List<String> lines = text.split('\n');

@@ -16,14 +16,16 @@ class HighBloodPressureSecond extends StatefulWidget {
   const HighBloodPressureSecond({super.key});
 
   @override
-  State<HighBloodPressureSecond> createState() => _HighBloodPressureSecondState();
+  State<HighBloodPressureSecond> createState() =>
+      _HighBloodPressureSecondState();
 }
 
 class _HighBloodPressureSecondState extends State<HighBloodPressureSecond> {
   final SettingsController settingsController = Get.put(SettingsController());
   final SelectController1 selectController = Get.put(SelectController1());
   ImageController controller = Get.put(ImageController());
-  HighBloodPressureController commentController = Get.put(HighBloodPressureController());
+  HighBloodPressureController commentController =
+      Get.put(HighBloodPressureController());
   final TextRecognitionService _textRecognitionService =
       TextRecognitionService();
   FlutterTts flutterTts = FlutterTts();
@@ -60,6 +62,10 @@ class _HighBloodPressureSecondState extends State<HighBloodPressureSecond> {
 
         value =
             value.replaceAll(RegExp(r'\D$'), ''); // 숫자 뒤에 오는 텍스트가 g이 아닌 9이면 제거
+
+        if (value.startsWith('0') && !value.startsWith('0.')) {
+          value = value.substring(0, 1) + '.' + value.substring(1);
+        }
 
         if (unit.isEmpty) {
           unit = 'g'; // 9 대신 g으로 변경
@@ -106,7 +112,7 @@ class _HighBloodPressureSecondState extends State<HighBloodPressureSecond> {
     await flutterTts.setLanguage('ko-KR');
     await flutterTts.setSpeechRate(0.3);
 
-     text = text.replaceAll(' g', ' gram');
+    text = text.replaceAll(' g', ' gram');
 
     setState(() {
       _isSpeaking.value = true;

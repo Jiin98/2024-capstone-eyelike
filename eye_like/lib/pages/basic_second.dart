@@ -46,7 +46,7 @@ class _BasicSecondState extends State<BasicSecond> {
     try {
       String text = await _textRecognitionService
           .recognizeTextFromImage(widget.cameraFile!);
-          
+
       // String text =
       //     await _textRecognitionService.recognizeTextFromImage(imageFile);
 
@@ -63,6 +63,10 @@ class _BasicSecondState extends State<BasicSecond> {
 
         value =
             value.replaceAll(RegExp(r'\D$'), ''); // 숫자 뒤에 오는 텍스트가 g이 아닌 9이면 제거
+
+        if (value.startsWith('0') && !value.startsWith('0.')) {
+          value = value.substring(0, 1) + '.' + value.substring(1);
+        }
 
         if (unit.isEmpty) {
           unit = 'g';
@@ -99,7 +103,7 @@ class _BasicSecondState extends State<BasicSecond> {
     await flutterTts.setLanguage('ko-KR');
     await flutterTts.setSpeechRate(0.3);
 
-     text = text.replaceAll(' g', ' gram');
+    text = text.replaceAll(' g', ' gram');
 
     setState(() {
       _isSpeaking.value = true;

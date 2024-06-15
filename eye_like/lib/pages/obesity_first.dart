@@ -61,6 +61,10 @@ class _ObesityState extends State<Obesity> {
         value =
             value.replaceAll(RegExp(r'\D$'), ''); // 숫자 뒤에 오는 텍스트가 g이 아닌 9이면 제거
 
+        if (value.startsWith('0') && !value.startsWith('0.')) {
+          value = value.substring(0, 1) + '.' + value.substring(1);
+        }
+
         if (unit.isEmpty) {
           unit = 'g'; // 9 대신 g으로 변경
         }
@@ -108,7 +112,7 @@ class _ObesityState extends State<Obesity> {
     await flutterTts.setLanguage('ko-KR');
     await flutterTts.setSpeechRate(0.3);
 
-     text = text.replaceAll(' g', ' gram');
+    text = text.replaceAll(' g', ' gram');
 
     List<String> lines = text.split('\n');
     for (String line in lines) {
