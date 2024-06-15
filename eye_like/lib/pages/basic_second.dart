@@ -152,14 +152,14 @@ class _BasicSecondState extends State<BasicSecond> {
                     children: [
                       SizedBox(
                         width: 250,
-                        height: 250,
+                        height: 300,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               '영양성분',
                               style: TextStyle(
-                                fontSize: 24,
+                                fontSize: settingsController.fontSize.value,
                                 fontWeight: FontWeight.w600,
                                 color: settingsController.highContrastMode.value
                                     ? Colors.white
@@ -172,7 +172,7 @@ class _BasicSecondState extends State<BasicSecond> {
                             Text(
                               extractedText.value,
                               style: TextStyle(
-                                fontSize: 20,
+                                fontSize: settingsController.fontSize.value,
                                 fontWeight: FontWeight.w400,
                                 color: settingsController.highContrastMode.value
                                     ? Colors.white

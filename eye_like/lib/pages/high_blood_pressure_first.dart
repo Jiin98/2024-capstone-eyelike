@@ -109,7 +109,7 @@ class _HighBloodPressureState extends State<HighBloodPressure> {
     await flutterTts.setLanguage('ko-KR');
     await flutterTts.setSpeechRate(0.3);
 
-     text = text.replaceAll(' g', ' gram');
+    text = text.replaceAll(' g', ' gram');
 
     List<String> lines = text.split('\n');
     for (String line in lines) {
@@ -237,14 +237,14 @@ class _HighBloodPressureState extends State<HighBloodPressure> {
                     children: [
                       SizedBox(
                         width: 250,
-                        height: 250,
+                        height: 300,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               '영양성분',
                               style: TextStyle(
-                                fontSize: 24,
+                                fontSize: settingsController.fontSize.value,
                                 fontWeight: FontWeight.w600,
                                 color: settingsController.highContrastMode.value
                                     ? Colors.white
@@ -257,7 +257,7 @@ class _HighBloodPressureState extends State<HighBloodPressure> {
                             Text(
                               extractedText,
                               style: TextStyle(
-                                fontSize: 20,
+                                fontSize: settingsController.fontSize.value,
                                 fontWeight: FontWeight.w400,
                                 color: settingsController.highContrastMode.value
                                     ? Colors.white

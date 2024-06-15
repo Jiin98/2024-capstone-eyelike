@@ -13,8 +13,6 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   final SettingsController settingsController = Get.put(SettingsController());
 
-  double currentValue = 24.0; // Silder에서 사용
-
   Widget _background() {
     return Center(
       child: Transform.translate(
@@ -101,14 +99,12 @@ class _SettingsState extends State<Settings> {
                           child: Slider(
                             activeColor: CupertinoColors.activeGreen,
                             inactiveColor: CupertinoColors.secondarySystemFill,
-                            value: currentValue,
+                            value: settingsController.fontSize.value,
                             min: 20, // 임의값
-                            max: 32, // 임의값
-                            onChanged: (value) => setState(
-                              () {
-                                currentValue = value;
-                              },
-                            ),
+                            max: 24, // 임의값
+                            onChanged: (value) {
+                              settingsController.updateFontSize(value);
+                            },
                           ),
                         ),
                         Text(
