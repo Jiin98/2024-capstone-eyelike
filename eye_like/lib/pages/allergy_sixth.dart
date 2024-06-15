@@ -1,35 +1,33 @@
 import 'dart:io';
 
 import 'package:eye_like/controllers/image_controller.dart';
+import 'package:eye_like/controllers/select_controller_2.dart';
 import 'package:eye_like/controllers/setting_controller.dart';
-import 'package:eye_like/controllers/text_comment_controller.dart';
 import 'package:eye_like/controllers/text_recognition_controller.dart';
 import 'package:eye_like/pages/app.dart';
-import 'package:eye_like/pages/basic_second.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 
-class BasicFirst extends StatefulWidget {
-  final File? cameraFile;
-
-  const BasicFirst({super.key, this.cameraFile});
+class AllergySixth extends StatefulWidget {
+  const AllergySixth({super.key});
 
   @override
-  State<BasicFirst> createState() => _BasicFirstState();
+  State<AllergySixth> createState() => _AllergySixthState();
 }
 
-class _BasicFirstState extends State<BasicFirst> {
+class _AllergySixthState extends State<AllergySixth> {
   final SettingsController settingsController = Get.put(SettingsController());
+  final SelectController2 selectController = Get.put(SelectController2());
   ImageController controller = Get.put(ImageController());
-  TextCommentController commentController = Get.put(TextCommentController());
+
   final TextRecognitionService _textRecognitionService =
       TextRecognitionService();
   FlutterTts flutterTts = FlutterTts();
   var extractedText = ''.obs;
-  var fullText = ''.obs;
+  final _isSpeaking = false.obs;
 
   @override
   void initState() {
@@ -38,22 +36,18 @@ class _BasicFirstState extends State<BasicFirst> {
   }
 
   Future<void> extractText() async {
-    // ByteData data =
-    //     await rootBundle.load('assets/images/food_label.jpeg'); // 이미지 테스트 코드
-    // Uint8List bytes = data.buffer.asUint8List();
-    // Directory tempDir = await getTemporaryDirectory();
-    // File imageFile =
-    //     await File('${tempDir.path}/food_label.jpeg').writeAsBytes(bytes);
+    ByteData data = await rootBundle.load('assets/images/food_label.jpeg');
+    Uint8List bytes = data.buffer.asUint8List();
+    Directory tempDir = await getTemporaryDirectory();
+    File imageFile =
+        await File('${tempDir.path}/food_label.jpeg').writeAsBytes(bytes);
 
     try {
-      String text = await _textRecognitionService
-          .recognizeTextFromImage(widget.cameraFile!);
-      // String text =
-      //     await _textRecognitionService.recognizeTextFromImage(imageFile);
+      String text =
+          await _textRecognitionService.recognizeTextFromImage(imageFile);
 
       RegExp regExp = RegExp(
-          r'(트랜스지방|포화지방|지방|당류|나트륨|탄수화물|단백질|콜레스테롤)\s*([\d,.]+)\s*(mg|g)?');
-
+          r'(트랜스지방|포화지방|지방|당류|나트륨|탄수화물|단백질|콜레스테롤|식이섬유|섬유질)\s*([\d,.]+)\s*(mg|g|ml)?');
       Iterable<RegExpMatch> matches = regExp.allMatches(text);
 
       List<Map<String, String>> nutrientInfoList = [];
@@ -67,7 +61,7 @@ class _BasicFirstState extends State<BasicFirst> {
             value.replaceAll(RegExp(r'\D$'), ''); // 숫자 뒤에 오는 텍스트가 g이 아닌 9이면 제거
 
         if (unit.isEmpty) {
-          unit = 'g'; // g로 변환
+          unit = 'g'; // 9 대신 g으로 변경
         }
 
         double numericValue =
@@ -76,7 +70,7 @@ class _BasicFirstState extends State<BasicFirst> {
         if (unit == 'mg') {
           numericValue /= 1000;
           value = numericValue.toString();
-          unit = 'g'; // mg -> g 환산
+          unit = 'g';
         }
 
         nutrientInfoList.add({
@@ -88,21 +82,9 @@ class _BasicFirstState extends State<BasicFirst> {
         return '$nutrient $value $unit';
       }).join('\n');
 
-      for (var nutrientInfo in nutrientInfoList) {
-        commentController.updateComment(
-          nutrientInfo['nutrient'] ?? '',
-          nutrientInfo['value'] ?? '',
-          nutrientInfo['unit'] ?? '',
-        );
-      }
-
-      commentController.finalizeComment();
-
       setState(() {
-        fullText.value = text;
-        print(text); //전체 텍스트 확인 코드
         extractedText.value = regexExtractedText;
-        _speak(commentController.comment.value);
+        _speak(extractedText.value);
       });
     } catch (e) {
       print('Error: $e');
@@ -113,16 +95,28 @@ class _BasicFirstState extends State<BasicFirst> {
     await flutterTts.setLanguage('ko-KR');
     await flutterTts.setSpeechRate(0.3);
 
-     text = text.replaceAll(' g', ' gram');
+    text = text.replaceAll(' g', ' gram');
+
+    setState(() {
+      _isSpeaking.value = true;
+    });
 
     List<String> lines = text.split('\n');
     for (String line in lines) {
+      if (!_isSpeaking.value) break;
       await flutterTts.speak(line);
       await Future.delayed(const Duration(seconds: 1));
     }
+
+    setState(() {
+      _isSpeaking.value = false;
+    });
   }
 
   Future<void> _stopTts() async {
+    setState(() {
+      _isSpeaking.value = false;
+    });
     await flutterTts.stop();
   }
 
@@ -184,70 +178,53 @@ class _BasicFirstState extends State<BasicFirst> {
                           ],
                         ),
                       ),
+                      // Obx(
+                      //   () => controller.imageFile.value != null //카메라 이미지 업데이트 되는지 확인 필요
+                      //       ? Image.file(
+                      //           File(controller.imageFile.value!.path),
+                      //           width: 250,
+                      //           height: 250,
+                      //         )
+                      //       : Container(
+                      //           width: 250,
+                      //           height: 250,
+                      //           color: Colors.grey,
+                      //         ),
+                      // ),
+                      // const SizedBox(
+                      //   height: 40,
+                      // ),
                     ],
                   ),
                 ),
                 const SizedBox(
                   height: 50,
                 ),
-                Column(
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        _stopTts();
-                        commentController.resetComment();
-                        Get.to(BasicSecond(cameraFile: widget.cameraFile));
-                      },
-                      child: Container(
-                        width: 280,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: settingsController.highContrastMode.value
-                              ? const Color(0xff00FF00)
-                              : const Color(0xff30D979),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Center(
-                            child: Text(
-                          '모든정보듣기',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24,
-                          ),
-                        )),
+                TextButton(
+                  onPressed: () {
+                    _stopTts();
+                    Get.to(App());
+                    selectController.resetSelections();
+                  },
+                  child: Container(
+                    width: 280,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: settingsController.highContrastMode.value
+                          ? const Color(0xff00FF00)
+                          : const Color(0xff30D979),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Center(
+                        child: Text(
+                      '종료',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
                       ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        _stopTts();
-                        commentController.resetComment();
-                        Get.to(App());
-                      },
-                      child: Container(
-                        width: 280,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: settingsController.highContrastMode.value
-                              ? const Color(0xff00FF00)
-                              : const Color(0xff30D979),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Center(
-                            child: Text(
-                          '종료',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24,
-                          ),
-                        )),
-                      ),
-                    ),
-                  ],
+                    )),
+                  ),
                 ),
               ],
             ),

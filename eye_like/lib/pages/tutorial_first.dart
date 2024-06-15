@@ -1,4 +1,3 @@
-import 'package:eye_like/components/mode_button_widget.dart';
 import 'package:eye_like/pages/tutorial_second.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

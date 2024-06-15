@@ -86,17 +86,17 @@ class App extends StatelessWidget {
                     color: settingsController.highContrastMode.value
                         ? const Color(0xFFFF0000)
                         : const Color(0xffF27979),
-                    // onPressed: () async {
-                    //   await controller.openCamera();
-                    //   if (controller.imageFile.value != null) {
-                    //     File imageFile = File(controller
-                    //         .imageFile.value!.path); // Convert XFile to File
-                    //     Get.to(() => BasicFirst(cameraFile: imageFile));
-                    //   }
-                    // },
-                    onPressed: () {
-                      Get.to(() => const BasicFirst());
+                    onPressed: () async {
+                      await controller.openCamera();
+                      if (controller.imageFile.value != null) {
+                        File imageFile = File(controller
+                            .imageFile.value!.path); // Convert XFile to File
+                        Get.to(() => BasicFirst(cameraFile: imageFile));
+                      }
                     },
+                    // onPressed: () {
+                    //   Get.to(() => const BasicFirst());
+                    // },
                   ),
                   const SizedBox(
                     height: 16,

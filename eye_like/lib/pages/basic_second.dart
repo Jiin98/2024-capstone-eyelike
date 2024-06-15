@@ -12,7 +12,9 @@ import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 
 class BasicSecond extends StatefulWidget {
-  const BasicSecond({super.key});
+  final File? cameraFile;
+
+  const BasicSecond({super.key, this.cameraFile});
 
   @override
   State<BasicSecond> createState() => _BasicSecondState();
@@ -35,15 +37,18 @@ class _BasicSecondState extends State<BasicSecond> {
   }
 
   Future<void> extractText() async {
-    ByteData data = await rootBundle.load('assets/images/food_label_7.jpeg');
-    Uint8List bytes = data.buffer.asUint8List();
-    Directory tempDir = await getTemporaryDirectory();
-    File imageFile =
-        await File('${tempDir.path}/food_label_7.jpeg').writeAsBytes(bytes);
+    // ByteData data = await rootBundle.load('assets/images/food_label.jpeg');
+    // Uint8List bytes = data.buffer.asUint8List();
+    // Directory tempDir = await getTemporaryDirectory();
+    // File imageFile =
+    //     await File('${tempDir.path}/food_label.jpeg').writeAsBytes(bytes);
 
     try {
-      String text =
-          await _textRecognitionService.recognizeTextFromImage(imageFile);
+      String text = await _textRecognitionService
+          .recognizeTextFromImage(widget.cameraFile!);
+          
+      // String text =
+      //     await _textRecognitionService.recognizeTextFromImage(imageFile);
 
       RegExp regExp = RegExp(
           r'(트랜스지방|포화지방|지방|당류|나트륨|탄수화물|단백질|콜레스테롤)\s*([\d,.]+)\s*(mg|g)?');
@@ -81,8 +86,6 @@ class _BasicSecondState extends State<BasicSecond> {
         return '$nutrient $value $unit';
       }).join('\n');
 
-
-
       setState(() {
         extractedText.value = regexExtractedText;
         _speak(extractedText.value);
@@ -95,6 +98,8 @@ class _BasicSecondState extends State<BasicSecond> {
   Future<void> _speak(String text) async {
     await flutterTts.setLanguage('ko-KR');
     await flutterTts.setSpeechRate(0.3);
+
+     text = text.replaceAll(' g', ' gram');
 
     setState(() {
       _isSpeaking.value = true;

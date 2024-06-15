@@ -1,5 +1,4 @@
 import 'package:eye_like/controllers/setting_controller.dart';
-import 'package:eye_like/pages/app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

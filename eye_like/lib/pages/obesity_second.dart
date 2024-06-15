@@ -37,11 +37,11 @@ class _ObesitySecondState extends State<ObesitySecond> {
   }
 
   Future<void> extractText() async {
-    ByteData data = await rootBundle.load('assets/images/food_label_7.jpeg');
+    ByteData data = await rootBundle.load('assets/images/food_label.jpeg');
     Uint8List bytes = data.buffer.asUint8List();
     Directory tempDir = await getTemporaryDirectory();
     File imageFile =
-        await File('${tempDir.path}/food_label_7.jpeg').writeAsBytes(bytes);
+        await File('${tempDir.path}/food_label.jpeg').writeAsBytes(bytes);
 
     try {
       String text =
@@ -105,6 +105,8 @@ class _ObesitySecondState extends State<ObesitySecond> {
   Future<void> _speak(String text) async {
     await flutterTts.setLanguage('ko-KR');
     await flutterTts.setSpeechRate(0.3);
+
+     text = text.replaceAll(' g', ' gram');
 
     setState(() {
       _isSpeaking.value = true;

@@ -37,11 +37,11 @@ class _ObesityState extends State<Obesity> {
   }
 
   Future<void> extractText() async {
-    ByteData data = await rootBundle.load('assets/images/food_label_7.jpeg');
+    ByteData data = await rootBundle.load('assets/images/food_label.jpeg');
     Uint8List bytes = data.buffer.asUint8List();
     Directory tempDir = await getTemporaryDirectory();
     File imageFile =
-        await File('${tempDir.path}/food_label_7.jpeg').writeAsBytes(bytes);
+        await File('${tempDir.path}/food_label.jpeg').writeAsBytes(bytes);
 
     try {
       String text =
@@ -108,6 +108,8 @@ class _ObesityState extends State<Obesity> {
     await flutterTts.setLanguage('ko-KR');
     await flutterTts.setSpeechRate(0.3);
 
+     text = text.replaceAll(' g', ' gram');
+
     List<String> lines = text.split('\n');
     for (String line in lines) {
       await flutterTts.speak(line);
@@ -127,7 +129,7 @@ class _ObesityState extends State<Obesity> {
     } else if (type == 'negative') {
       dialogColor = const Color(0xffFF0000);
     } else {
-      dialogColor = Colors.green;
+      return;
     }
 
     showDialog(
@@ -145,7 +147,7 @@ class _ObesityState extends State<Obesity> {
                 color: settingsController.highContrastMode.value
                     ? Colors.black
                     : Colors.white,
-                    borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(10),
               ),
               child: Column(
                 children: [
