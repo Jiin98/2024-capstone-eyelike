@@ -5,7 +5,6 @@ class DiabetesController extends GetxController {
   var hasWarnings = false.obs;
   var positiveMessages = <String>[].obs;
   var negativeMessages = <String>[].obs;
-  var additionalInfoMessages = <String>[].obs; // 추가정보가 긍정 또는 부정으로 묶이면 제거
 
   var mostExtremeMessage = ''.obs;
   var mostExtremeMessageType = ''.obs;
@@ -17,7 +16,6 @@ class DiabetesController extends GetxController {
     hasWarnings.value = false;
     positiveMessages.clear();
     negativeMessages.clear();
-    additionalInfoMessages.clear(); // 추가정보가 긍정 또는 부정으로 묶이면 제거
     mostExtremeMessage.value = '';
     mostExtremeMessageType.value = '';
     mostExtremeValue = 0.0;
@@ -82,7 +80,7 @@ class DiabetesController extends GetxController {
           _updateMessage(
               '해당 제품은 식이섬유를 함유하고 있습니다. 식이섬유를 식사 전에 섭취하면 혈당 스파이크를 예방해 살이 찌기 쉬운 체질로 변하는 것을 예방할 수 있습니다.',
               numericValue,
-              'additionalInfo'); // 추가정보가 긍정 또는 부정으로 묶이면 제거
+              'positive');
         }
       } else if (nutrient == '나트륨') {
         if (numericValue < 0.05) {
@@ -175,7 +173,7 @@ class DiabetesController extends GetxController {
           _updateMessage(
               '해당 제품은 식이섬유를 함유하고 있습니다. 식이섬유를 식사 전에 섭취하면 혈당 스파이크를 예방해 살이 찌기 쉬운 체질로 변하는 것을 예방할 수 있습니다.',
               numericValue,
-              'additionalInfo'); // 추가정보가 긍정 또는 부정으로 묶이면 제거
+              'positive'); // 추가정보가 긍정 또는 부정으로 묶이면 제거
         }
       } else if (nutrient == '나트륨') {
         if (numericValue < 0.05) {
@@ -222,9 +220,8 @@ class DiabetesController extends GetxController {
       }
     }
 
-    hasWarnings.value = positiveMessages.isNotEmpty ||
-        negativeMessages.isNotEmpty ||
-        additionalInfoMessages.isNotEmpty; // 추가정보가 긍정 또는 부정으로 묶이면 제거
+    hasWarnings.value =
+        positiveMessages.isNotEmpty || negativeMessages.isNotEmpty;
   }
 
   void _updateMessage(String message, double value, String type) {
@@ -232,9 +229,6 @@ class DiabetesController extends GetxController {
       positiveMessages.add(message);
     } else if (type == 'negative') {
       negativeMessages.add(message);
-    } else if (type == 'additionalInfo') {
-      // 추가정보가 긍정 또는 부정으로 묶이면 제거
-      additionalInfoMessages.add(message); // 추가정보가 긍정 또는 부정으로 묶이면 제거
     }
 
     if (value > mostExtremeValue) {
