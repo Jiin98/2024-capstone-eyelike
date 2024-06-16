@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/ios/.symlinks/plugins/google_mlkit_text_recognition/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/ios/.symlinks/plugins/google_mlkit_text_recognition/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/ios/.symlinks/plugins/google_mlkit_text_recognition/build" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/ios/.symlinks/plugins/path_provider_foundation/build" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/ios/.symlinks/plugins/path_provider_foundation/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/ios/.symlinks/plugins/path_provider_foundation/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/windows/flutter/ephemeral/.plugin_symlinks/image_picker_windows/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/windows/flutter/ephemeral/.plugin_symlinks/image_picker_windows/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/windows/flutter/ephemeral/.plugin_symlinks/image_picker_windows/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/windows/flutter/ephemeral/.plugin_symlinks/path_provider_windows/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/windows/flutter/ephemeral/.plugin_symlinks/path_provider_windows/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/windows/flutter/ephemeral/.plugin_symlinks/path_provider_windows/build" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/windows/flutter/ephemeral/.plugin_symlinks/file_selector_windows/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/windows/flutter/ephemeral/.plugin_symlinks/file_selector_windows/build" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/windows/flutter/ephemeral/.plugin_symlinks/file_selector_windows/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/ios/.symlinks/plugins/image_picker_ios/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/ios/.symlinks/plugins/image_picker_ios/build" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/ios/.symlinks/plugins/image_picker_ios/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/linux/flutter/ephemeral/.plugin_symlinks/file_selector_linux/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/linux/flutter/ephemeral/.plugin_symlinks/file_selector_linux/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/linux/flutter/ephemeral/.plugin_symlinks/file_selector_linux/build" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/linux/flutter/ephemeral/.plugin_symlinks/image_picker_linux/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/linux/flutter/ephemeral/.plugin_symlinks/image_picker_linux/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/linux/flutter/ephemeral/.plugin_symlinks/image_picker_linux/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/ios/.symlinks/plugins/image_picker_ios/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/ios/.symlinks/plugins/image_picker_ios/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/ios/.symlinks/plugins/image_picker_ios/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/ios/.symlinks/plugins/path_provider_foundation/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/ios/.symlinks/plugins/path_provider_foundation/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/ios/.symlinks/plugins/path_provider_foundation/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/linux/flutter/ephemeral/.plugin_symlinks/image_picker_linux/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/linux/flutter/ephemeral/.plugin_symlinks/image_picker_linux/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/linux/flutter/ephemeral/.plugin_symlinks/image_picker_linux/build" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/linux/flutter/ephemeral/.plugin_symlinks/file_selector_linux/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/linux/flutter/ephemeral/.plugin_symlinks/file_selector_linux/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/linux/flutter/ephemeral/.plugin_symlinks/file_selector_linux/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/ios/.symlinks/plugins/google_mlkit_commons/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/ios/.symlinks/plugins/google_mlkit_commons/build" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/ios/.symlinks/plugins/google_mlkit_commons/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/windows/flutter/ephemeral/.plugin_symlinks/image_picker_windows/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/windows/flutter/ephemeral/.plugin_symlinks/image_picker_windows/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/windows/flutter/ephemeral/.plugin_symlinks/image_picker_windows/build" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/windows/flutter/ephemeral/.plugin_symlinks/file_selector_windows/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/windows/flutter/ephemeral/.plugin_symlinks/file_selector_windows/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/windows/flutter/ephemeral/.plugin_symlinks/file_selector_windows/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/linux/flutter/ephemeral/.plugin_symlinks/path_provider_linux/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/linux/flutter/ephemeral/.plugin_symlinks/path_provider_linux/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/linux/flutter/ephemeral/.plugin_symlinks/path_provider_linux/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/linux/flutter/ephemeral/.plugin_symlinks/path_provider_linux/build" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/linux/flutter/ephemeral/.plugin_symlinks/path_provider_linux/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/linux/flutter/ephemeral/.plugin_symlinks/path_provider_linux/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/windows/flutter/ephemeral/.plugin_symlinks/flutter_tts/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/windows/flutter/ephemeral/.plugin_symlinks/flutter_tts/build" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/windows/flutter/ephemeral/.plugin_symlinks/flutter_tts/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/build" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/windows/flutter/ephemeral/.plugin_symlinks/flutter_tts/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/windows/flutter/ephemeral/.plugin_symlinks/flutter_tts/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/windows/flutter/ephemeral/.plugin_symlinks/flutter_tts/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/ios/.symlinks/plugins/flutter_tts/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/ios/.symlinks/plugins/flutter_tts/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/ios/.symlinks/plugins/flutter_tts/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/ios/.symlinks/plugins/flutter_tts/build" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/ios/.symlinks/plugins/flutter_tts/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/ios/.symlinks/plugins/flutter_tts/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/windows/flutter/ephemeral/.plugin_symlinks/path_provider_windows/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/windows/flutter/ephemeral/.plugin_symlinks/path_provider_windows/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/eye_like/windows/flutter/ephemeral/.plugin_symlinks/path_provider_windows/example/.dart_tool" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
