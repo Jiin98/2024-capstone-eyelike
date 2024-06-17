@@ -99,7 +99,7 @@ class _AllergyFifthState extends State<AllergyFifth> {
             double.tryParse(value) ?? 0; // 소수 존재하기 때문에 double 변수 사용
 
         if (unit == 'mg') {
-          numericValue /= 1000;
+          numericValue /= 100;
           value = numericValue.toString();
           unit = 'g';
         }
@@ -136,9 +136,9 @@ class _AllergyFifthState extends State<AllergyFifth> {
 
   Future<void> _speak(String text) async {
     await flutterTts.setLanguage('ko-KR');
-    await flutterTts.setSpeechRate(0.3);
+    await flutterTts.setSpeechRate(0.4);
 
-    text = text.replaceAll(' g', ' gram');
+    text = text.replaceAll(' g', '그램');
 
     // 줄바꿈 문자를 인식하여 잠시 멈추기
     List<String> lines = text.split('\n');
