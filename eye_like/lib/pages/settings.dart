@@ -2,6 +2,7 @@ import 'package:eye_like/controllers/setting_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:volume_key_board/volume_key_board.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -12,6 +13,40 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   final SettingsController settingsController = Get.put(SettingsController());
+
+    @override
+  void initState() { //이 코드를 글씨크기 조절이 필요한 페이지에 넣으면됨
+    super.initState();
+    VolumeKeyBoard.instance.addListener(_volumeKeyListener);
+  }
+
+  @override
+  void dispose() {
+    VolumeKeyBoard.instance.removeListener();
+    super.dispose();
+  }
+
+  void _volumeKeyListener(VolumeKey event) {
+    if (event == VolumeKey.up) {
+      _increaseFontSize();
+    } else if (event == VolumeKey.down) {
+      _decreaseFontSize();
+    }
+  }
+
+  void _increaseFontSize() {
+    double newSize = settingsController.fontSize.value + 1;
+    if (newSize <= 24) { 
+      settingsController.updateFontSize(newSize);
+    }
+  }
+
+  void _decreaseFontSize() {
+    double newSize = settingsController.fontSize.value - 1;
+    if (newSize >= 20) { 
+      settingsController.updateFontSize(newSize);
+    }
+  }
 
   Widget _background() {
     return Center(

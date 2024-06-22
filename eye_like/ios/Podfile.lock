@@ -75,6 +75,8 @@ PODS:
     - Flutter
     - FlutterMacOS
   - PromisesObjC (2.4.0)
+  - volume_key_board (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
@@ -84,6 +86,7 @@ DEPENDENCIES:
   - GoogleMLKit/TextRecognitionKorean (~> 6.0.0)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
+  - volume_key_board (from `.symlinks/plugins/volume_key_board/ios`)
 
 SPEC REPOS:
   trunk:
@@ -115,6 +118,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/image_picker_ios/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
+  volume_key_board:
+    :path: ".symlinks/plugins/volume_key_board/ios"
 
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
@@ -137,6 +142,7 @@ SPEC CHECKSUMS:
   nanopb: 438bc412db1928dac798aa6fd75726007be04262
   path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
+  volume_key_board: 544501f83cce6478414091fb47f614471108b220
 
 PODFILE CHECKSUM: 7460f9f3713c4a640fa2b7b6f351f78ec4217050
 
