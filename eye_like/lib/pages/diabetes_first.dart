@@ -12,6 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:volume_key_board/volume_key_board.dart';
 
 class Diabetes extends StatefulWidget {
   const Diabetes({super.key});
@@ -29,11 +30,66 @@ class _DiabetesState extends State<Diabetes> {
       TextRecognitionService();
   FlutterTts flutterTts = FlutterTts();
   String extractedText = '';
+  var isSpeaking = false.obs;
 
   @override
   void initState() {
     super.initState();
     extractText();
+    VolumeKeyBoard.instance.addListener(_volumeKeyListener);
+    flutterTts.setCompletionHandler(() {
+      isSpeaking.value = false;
+    });
+  }
+
+  @override
+  void dispose() {
+    VolumeKeyBoard.instance.removeListener();
+    super.dispose();
+  }
+
+  void _volumeKeyListener(VolumeKey event) {
+    if (isSpeaking.value) {
+      if (event == VolumeKey.up) {
+        _adjustVolume('up');
+      } else if (event == VolumeKey.down) {
+        _adjustVolume('down');
+      }
+    } else {
+      if (event == VolumeKey.up) {
+        _increaseFontSize();
+      } else if (event == VolumeKey.down) {
+        _decreaseFontSize();
+      }
+    }
+  }
+
+  void _adjustVolume(String direction) async {
+    try {
+      if (direction == 'up') {
+        await SystemChannels.platform
+            .invokeMethod('SystemNavigator.setVolumeUp');
+      } else if (direction == 'down') {
+        await SystemChannels.platform
+            .invokeMethod('SystemNavigator.setVolumeDown');
+      }
+    } catch (e) {
+      print('Error adjusting volume: $e');
+    }
+  }
+
+  void _increaseFontSize() {
+    double newSize = settingsController.fontSize.value + 1;
+    if (newSize <= 24) {
+      settingsController.updateFontSize(newSize);
+    }
+  }
+
+  void _decreaseFontSize() {
+    double newSize = settingsController.fontSize.value - 1;
+    if (newSize >= 20) {
+      settingsController.updateFontSize(newSize);
+    }
   }
 
   Future<void> extractText() async {
@@ -109,6 +165,7 @@ class _DiabetesState extends State<Diabetes> {
   }
 
   Future<void> _speak(String text) async {
+    isSpeaking.value = true;
     await flutterTts.setLanguage('ko-KR');
     await flutterTts.setSpeechRate(0.4);
 
@@ -123,6 +180,7 @@ class _DiabetesState extends State<Diabetes> {
 
   Future<void> _stopTts() async {
     await flutterTts.stop();
+    isSpeaking.value = false;
   }
 
   void _showMessageDialog(String message, String type) {
@@ -212,6 +270,14 @@ class _DiabetesState extends State<Diabetes> {
     );
   }
 
+  void _addVolumeKeyListener() {
+    VolumeKeyBoard.instance.addListener(_volumeKeyListener);
+  }
+
+  void _removeVolumeKeyListener() {
+    VolumeKeyBoard.instance.removeListener();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -297,6 +363,7 @@ class _DiabetesState extends State<Diabetes> {
                     TextButton(
                       onPressed: () {
                         _stopTts();
+                        _removeVolumeKeyListener();
                         commentController.resetComment();
                         Get.to(const DiabetesSecond());
                       },

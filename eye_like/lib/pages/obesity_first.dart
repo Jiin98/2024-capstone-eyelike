@@ -270,6 +270,14 @@ class _ObesityState extends State<Obesity> {
     );
   }
 
+  void _addVolumeKeyListener() {
+    VolumeKeyBoard.instance.addListener(_volumeKeyListener);
+  }
+
+  void _removeVolumeKeyListener() {
+    VolumeKeyBoard.instance.removeListener();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -355,6 +363,7 @@ class _ObesityState extends State<Obesity> {
                     TextButton(
                       onPressed: () {
                         _stopTts();
+                        _removeVolumeKeyListener();
                         commentController.resetComment();
                         Get.to(const ObesitySecond());
                       },
